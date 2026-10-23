@@ -1,0 +1,36 @@
+{
+  "name": "kost-management",
+  "private": true,
+  "packageManager": "pnpm@10.34.7",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel --filter @kost/api --filter @kost/web dev",
+    "dev:api": "pnpm --filter @kost/api dev",
+    "dev:web": "pnpm --filter @kost/web dev",
+    "build": "pnpm -r build",
+    "check": "pnpm -r check",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "pnpm -r test",
+    "test:e2e": "pnpm --filter @kost/web test:e2e",
+    "db:generate": "pnpm --filter @kost/database db:generate",
+    "db:migrate": "pnpm --filter @kost/database db:migrate",
+    "db:studio": "pnpm --filter @kost/database db:studio",
+    "bootstrap": "pnpm --filter @kost/api bootstrap",
+    "seed:demo": "pnpm --filter @kost/api seed:demo"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-svelte": "^3.23.1",
+    "globals": "^16.5.0",
+    "prettier": "^3.9.10",
+    "prettier-plugin-svelte": "^4.1.1",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.0"
+  }
+}

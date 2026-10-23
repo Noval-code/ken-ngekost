@@ -1,0 +1,19 @@
+{
+  "name": "Ken Ngekost",
+  "short_name": "Ngekost",
+  "description": "Manajemen kost: kamar, penghuni, tagihan, pembayaran, dan laporan.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f6f3ec",
+  "theme_color": "#0c6b5c",
+  "lang": "id",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

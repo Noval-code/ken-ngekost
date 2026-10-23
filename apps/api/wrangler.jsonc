@@ -1,0 +1,25 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "kost-api",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true,
+  },
+  "hyperdrive": [
+    {
+      "binding": "HYPERDRIVE",
+      "id": "REPLACE_WITH_HYPERDRIVE_ID",
+    },
+  ],
+  "triggers": {
+    "crons": ["0 1 * * *"],
+  },
+  "vars": {
+    "BETTER_AUTH_URL": "https://kost-api.example.workers.dev",
+    "WEB_URL": "https://kost-web.example.workers.dev",
+    "ENVIRONMENT": "production",
+    "COOKIE_SECURE": "true",
+  },
+}
