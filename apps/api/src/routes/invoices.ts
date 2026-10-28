@@ -14,6 +14,7 @@ import { Hono } from 'hono';
 import { assertPropertyAccess, requireRole } from '../lib/access';
 import { writeAudit } from '../lib/audit';
 import { fail, paginated, paginationFrom, parseJson, parseQuery } from '../lib/http';
+import { generateInvoicePdf } from '../lib/pdf';
 import type { AppVariables } from '../types';
 
 export const invoiceRoutes = new Hono<{ Variables: AppVariables }>();
@@ -201,6 +202,102 @@ invoiceRoutes.get('/:invoiceId', async (c) => {
                 ? 'overdue'
                 : 'unpaid',
     },
+  });
+});
+
+invoiceRoutes.get('/:invoiceId/pdf', async (c) => {
+  const ctx = c.get('ctx');
+  const invoiceId = c.req.param('invoiceId');
+  const [row] = await ctx.db
+    .select({
+      invoice: invoices,
+      leaseId: leases.id,
+      leaseStart: leases.startDate,
+      leaseEnd: leases.endDate,
+      roomId: rooms.id,
+      roomNumber: rooms.roomNumber,
+      propertyId: properties.id,
+      propertyName: properties.name,
+      propertyAddress: properties.address,
+      tenantId: tenants.id,
+      tenantName: tenants.name,
+      tenantPhone: tenants.phone,
+    })
+    .from(invoices)
+    .innerJoin(leases, eq(leases.id, invoices.leaseId))
+    .innerJoin(rooms, eq(rooms.id, leases.roomId))
+    .innerJoin(properties, eq(properties.id, rooms.propertyId))
+    .innerJoin(tenants, eq(tenants.id, leases.tenantId))
+    .where(and(eq(invoices.id, invoiceId), eq(invoices.organizationId, ctx.organization.id)))
+    .limit(1);
+
+  if (!row) fail(404, 'INVOICE_NOT_FOUND', 'Tagihan tidak ditemukan.');
+  assertPropertyAccess(ctx, row.propertyId);
+
+  const items = await ctx.db
+    .select()
+    .from(invoiceItems)
+    .where(eq(invoiceItems.invoiceId, invoiceId));
+
+  const allocations = await ctx.db
+    .select({
+      id: paymentAllocations.id,
+      amount: paymentAllocations.amount,
+      paymentId: payments.id,
+      paymentNumber: payments.paymentNumber,
+      paidAt: payments.paidAt,
+      method: payments.method,
+      paymentStatus: payments.status,
+      reference: payments.reference,
+    })
+    .from(paymentAllocations)
+    .innerJoin(payments, eq(payments.id, paymentAllocations.paymentId))
+    .where(and(eq(paymentAllocations.invoiceId, invoiceId), eq(payments.status, 'received')))
+    .orderBy(desc(payments.paidAt));
+
+  const paidAmount = allocations.reduce((sum, item) => sum + Number(item.amount), 0);
+  const balance = (Number(row.invoice.totalAmount) - paidAmount).toFixed(2);
+  const derivedStatus =
+    row.invoice.status === 'void'
+      ? 'void'
+      : paidAmount >= Number(row.invoice.totalAmount)
+        ? 'paid'
+        : paidAmount > 0
+          ? row.invoice.dueDate < new Date().toISOString().slice(0, 10)
+            ? 'overdue'
+            : 'partial'
+          : row.invoice.dueDate < new Date().toISOString().slice(0, 10)
+            ? 'overdue'
+            : 'unpaid';
+
+  const pdfBytes = await generateInvoicePdf({
+    organization: ctx.organization,
+    invoice: row.invoice,
+    property: {
+      name: row.propertyName,
+      address: row.propertyAddress,
+    },
+    room: {
+      roomNumber: row.roomNumber,
+    },
+    tenant: {
+      name: row.tenantName,
+      phone: row.tenantPhone,
+    },
+    items,
+    allocations,
+    paidAmount: paidAmount.toFixed(2),
+    balance,
+    derivedStatus,
+  });
+
+  const isDownload = c.req.query('download') === 'true';
+  const disposition = isDownload ? 'attachment' : 'inline';
+
+  return c.body(pdfBytes.buffer as ArrayBuffer, 200, {
+    'Content-Type': 'application/pdf',
+    'Content-Disposition': `${disposition}; filename="Invoice-${row.invoice.invoiceNumber}.pdf"`,
+    'Cache-Control': 'no-cache',
   });
 });
 

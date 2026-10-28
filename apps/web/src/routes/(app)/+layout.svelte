@@ -75,7 +75,7 @@
 <svelte:head><title>{data.me.organization.name} - Panggora</title></svelte:head>
 
 <div class="min-h-dvh lg:flex">
-  <aside class="hidden w-[264px] shrink-0 border-r border-line bg-surface/85 lg:flex lg:flex-col">
+  <aside class="hidden w-[264px] shrink-0 border-r border-line bg-surface/85 lg:flex lg:flex-col print:hidden">
     <div class="flex items-center justify-between px-5 pb-4 pt-6">
       <a href="/" class="flex items-center gap-3">
         <span
@@ -141,7 +141,7 @@
 
   <div class="min-w-0 flex-1">
     <header
-      class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-paper/90 px-4 backdrop-blur-md lg:hidden"
+      class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-paper/90 px-4 backdrop-blur-md lg:hidden print:hidden"
     >
       <a href="/" class="flex items-center gap-2">
         <span
@@ -158,14 +158,14 @@
       </div>
     </header>
 
-    <main class="mx-auto w-full max-w-[1180px] px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:pb-12 lg:pt-8">
+    <main class="mx-auto w-full max-w-[1180px] px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:pb-12 lg:pt-8 print:p-0 print:max-w-none">
       {@render children()}
     </main>
   </div>
 </div>
 
 <nav
-  class="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 px-2 pt-1.5 backdrop-blur-md lg:hidden"
+  class="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 px-2 pt-1.5 backdrop-blur-md lg:hidden print:hidden"
   aria-label="Navigasi bawah"
 >
   <div class="grid grid-cols-5">

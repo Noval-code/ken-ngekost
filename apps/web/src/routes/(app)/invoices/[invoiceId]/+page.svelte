@@ -7,7 +7,7 @@
   import PageHeader from '#lib/components/PageHeader.svelte';
   import StatusBadge from '#lib/components/StatusBadge.svelte';
   import Modal from '#lib/components/Modal.svelte';
-  import { ArrowLeft, Banknote, LoaderCircle, Printer, XCircle } from 'lucide-svelte';
+  import { ArrowLeft, Banknote, Download, FileText, LoaderCircle, Printer, XCircle } from 'lucide-svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -42,16 +42,38 @@
 
 <svelte:head><title>{data.invoice.invoiceNumber} · Panggora</title></svelte:head>
 
-<div class="mb-4 flex items-center justify-between gap-3">
+<div class="mb-4 flex flex-wrap items-center justify-between gap-3 print:hidden">
   <a
     class="inline-flex min-h-9 items-center gap-1.5 text-xs font-semibold text-muted hover:text-ink"
     href="/invoices"
   >
     <ArrowLeft size={14} /> Kembali ke tagihan
   </a>
-  <button class="btn-secondary btn-sm print:hidden" onclick={() => window.print()}
-    ><Printer size={15} /> Cetak</button
-  >
+  <div class="flex flex-wrap items-center gap-2">
+    <a
+      class="btn-secondary btn-sm"
+      href="/api/invoices/{data.invoice.id}/pdf"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <FileText size={15} /> Lihat PDF
+    </a>
+    <a
+      class="btn-secondary btn-sm"
+      href="/api/invoices/{data.invoice.id}/pdf?download=true"
+      download="Invoice-{data.invoice.invoiceNumber}.pdf"
+    >
+      <Download size={15} /> Unduh PDF
+    </a>
+    <a
+      class="btn-secondary btn-sm"
+      href="/invoices/{data.invoice.id}/print"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <Printer size={15} /> Cetak
+    </a>
+  </div>
 </div>
 
 <PageHeader
