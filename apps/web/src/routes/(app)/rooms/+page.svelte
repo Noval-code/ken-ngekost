@@ -43,7 +43,7 @@
   }
 </script>
 
-<svelte:head><title>Kamar · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Kamar · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Hunian"

@@ -8,8 +8,8 @@ import {
   payments,
   properties,
   rooms,
-} from '@kost/database';
-import { addMoney, toMoneyString } from '@kost/shared';
+} from '@panggora/database';
+import { addMoney, toMoneyString } from '@panggora/shared';
 import { and, eq, inArray, sql, type AnyColumn, type SQL } from 'drizzle-orm';
 import type { RequestContext } from '../types';
 import { qualifiedColumn } from './sql';

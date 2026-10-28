@@ -7,8 +7,8 @@ import {
   properties,
   rooms,
   tenants,
-} from '@kost/database';
-import { invoiceListQuery, voidInvoiceSchema } from '@kost/validation';
+} from '@panggora/database';
+import { invoiceListQuery, voidInvoiceSchema } from '@panggora/validation';
 import { and, count, desc, eq, gte, ilike, inArray, lte, or, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { assertPropertyAccess, requireRole } from '../lib/access';

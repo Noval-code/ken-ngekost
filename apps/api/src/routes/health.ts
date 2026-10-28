@@ -7,7 +7,7 @@ export const healthRoutes = new Hono<{ Variables: AppVariables }>();
 healthRoutes.get('/', (c) =>
   c.json({
     status: 'ok',
-    service: 'kost-api',
+    service: 'panggora-api',
     timestamp: new Date().toISOString(),
   }),
 );

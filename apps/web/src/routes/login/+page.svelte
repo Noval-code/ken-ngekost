@@ -30,7 +30,7 @@
   }
 </script>
 
-<svelte:head><title>Masuk · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Masuk · Panggora</title></svelte:head>
 
 <div class="grid min-h-dvh lg:grid-cols-[1.05fr_0.95fr]">
   <section
@@ -42,9 +42,9 @@
     <div class="relative">
       <span
         class="flex size-12 items-center justify-center rounded-2xl bg-white/10 text-xl font-black backdrop-blur"
-        >K</span
+        >P</span
       >
-      <p class="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-white/60">Ken Ngekost</p>
+      <p class="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-white/60">Panggora</p>
       <h1 class="mt-3 max-w-lg text-4xl font-bold leading-[1.1]">
         Urus kost dengan tenang, dari kamar sampai pembayaran.
       </h1>
@@ -69,10 +69,10 @@
       <div class="mb-8 flex items-center gap-3 lg:hidden">
         <span
           class="flex size-10 items-center justify-center rounded-xl bg-accent text-lg font-black text-white"
-          >K</span
+          >P</span
         >
         <div>
-          <p class="font-bold leading-tight">Ken Ngekost</p>
+          <p class="font-bold leading-tight">Panggora</p>
           <p class="text-xs text-muted">Manajemen kost</p>
         </div>
       </div>

@@ -20,7 +20,7 @@ export async function serverApi<T>(
   const headers = new Headers(init.headers);
   const cookie = event.request.headers.get('cookie');
   if (cookie) headers.set('cookie', cookie);
-  const orgId = event.cookies.get('kost_org');
+  const orgId = event.cookies.get('panggora_org');
   if (orgId) headers.set('x-organization-id', orgId);
   if (init.body && !headers.has('content-type')) {
     headers.set('content-type', 'application/json');

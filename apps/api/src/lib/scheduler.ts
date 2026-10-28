@@ -1,8 +1,22 @@
-import { invoices, leases, organizations, rooms, scheduledJobRuns } from '@kost/database';
-import type { AppDatabase } from '@kost/database';
-import { isPeriodBillable, periodAt, todayIso } from '@kost/shared';
+import {
+  invoices,
+  leases,
+  organizations,
+  properties,
+  rooms,
+  scheduledJobRuns,
+  tenants,
+} from '@panggora/database';
+import type { AppDatabase } from '@panggora/database';
+import { isPeriodBillable, periodAt, todayIso } from '@panggora/shared';
 import { and, eq, inArray } from 'drizzle-orm';
 import { createInvoiceForPeriod } from './invoices';
+import {
+  notifyOrganizationMembers,
+  invoiceIssuedNotification,
+  leaseExpiringNotification,
+  leaseEndedNotification,
+} from './notifications';
 
 export const INVOICE_JOB_NAME = 'invoice-generation';
 
@@ -82,8 +96,93 @@ export async function runInvoiceScheduler(
           if (created) {
             summary.generated += 1;
             existingStarts.add(period.start);
+            try {
+              const [tenantInfo] = await db
+                .select({ name: tenants.name })
+                .from(tenants)
+                .where(eq(tenants.id, lease.tenantId))
+                .limit(1);
+              const [roomInfo] = await db
+                .select({ roomNumber: rooms.roomNumber, propertyId: rooms.propertyId })
+                .from(rooms)
+                .where(eq(rooms.id, lease.roomId))
+                .limit(1);
+              const [propInfo] = roomInfo
+                ? await db
+                    .select({ name: properties.name })
+                    .from(properties)
+                    .where(eq(properties.id, roomInfo.propertyId))
+                    .limit(1)
+                : [undefined];
+
+              if (tenantInfo && roomInfo) {
+                await notifyOrganizationMembers(
+                  db,
+                  lease.organizationId,
+                  invoiceIssuedNotification({
+                    tenantName: tenantInfo.name,
+                    roomNumber: roomInfo.roomNumber,
+                    propertyName: propInfo?.name ?? '',
+                    periodStart: period.start,
+                    periodEnd: period.end,
+                    totalAmount: lease.rentAmount,
+                    invoiceId: created.id,
+                    invoiceNumber: created.invoiceNumber,
+                  }),
+                  { propertyId: roomInfo.propertyId },
+                );
+              }
+            } catch {
+              // Notification errors should not fail scheduler
+            }
           } else {
             summary.skipped += 1;
+          }
+        }
+
+        // Check if lease is expiring soon (within 7 days)
+        if (lease.endDate >= today) {
+          const endDateObj = new Date(lease.endDate + 'T00:00:00Z');
+          const todayObj = new Date(today + 'T00:00:00Z');
+          const daysLeft = Math.round((endDateObj.getTime() - todayObj.getTime()) / (86400 * 1000));
+          if (daysLeft > 0 && daysLeft <= 7) {
+            try {
+              const [tenantInfo] = await db
+                .select({ name: tenants.name })
+                .from(tenants)
+                .where(eq(tenants.id, lease.tenantId))
+                .limit(1);
+              const [roomInfo] = await db
+                .select({ roomNumber: rooms.roomNumber, propertyId: rooms.propertyId })
+                .from(rooms)
+                .where(eq(rooms.id, lease.roomId))
+                .limit(1);
+              const [propInfo] = roomInfo
+                ? await db
+                    .select({ name: properties.name })
+                    .from(properties)
+                    .where(eq(properties.id, roomInfo.propertyId))
+                    .limit(1)
+                : [undefined];
+
+              if (tenantInfo && roomInfo) {
+                await notifyOrganizationMembers(
+                  db,
+                  lease.organizationId,
+                  leaseExpiringNotification({
+                    tenantName: tenantInfo.name,
+                    roomNumber: roomInfo.roomNumber,
+                    propertyName: propInfo?.name ?? '',
+                    endDate: lease.endDate,
+                    leaseId: lease.id,
+                    daysLeft,
+                  }),
+                  { propertyId: roomInfo.propertyId },
+                );
+              }
+            } catch {
+              // Notification errors should not fail scheduler
+            }
           }
         }
 
@@ -94,6 +193,44 @@ export async function runInvoiceScheduler(
             .where(and(eq(leases.id, lease.id), eq(leases.status, 'active')))
             .returning({ id: leases.id });
           summary.closedLeases += closed.length;
+
+          if (closed.length > 0) {
+            try {
+              const [tenantInfo] = await db
+                .select({ name: tenants.name })
+                .from(tenants)
+                .where(eq(tenants.id, lease.tenantId))
+                .limit(1);
+              const [roomInfo] = await db
+                .select({ roomNumber: rooms.roomNumber, propertyId: rooms.propertyId })
+                .from(rooms)
+                .where(eq(rooms.id, lease.roomId))
+                .limit(1);
+              const [propInfo] = roomInfo
+                ? await db
+                    .select({ name: properties.name })
+                    .from(properties)
+                    .where(eq(properties.id, roomInfo.propertyId))
+                    .limit(1)
+                : [undefined];
+
+              if (tenantInfo && roomInfo) {
+                await notifyOrganizationMembers(
+                  db,
+                  lease.organizationId,
+                  leaseEndedNotification({
+                    tenantName: tenantInfo.name,
+                    roomNumber: roomInfo.roomNumber,
+                    propertyName: propInfo?.name ?? '',
+                    leaseId: lease.id,
+                  }),
+                  { propertyId: roomInfo.propertyId },
+                );
+              }
+            } catch {
+              // Notification errors should not fail scheduler
+            }
+          }
         }
       } catch (error) {
         summary.errors.push({

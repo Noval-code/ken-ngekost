@@ -12,7 +12,7 @@
   );
 </script>
 
-<svelte:head><title>Deposit · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Deposit · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Keuangan"

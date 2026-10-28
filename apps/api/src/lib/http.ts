@@ -1,4 +1,4 @@
-import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@kost/shared';
+import { DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE } from '@panggora/shared';
 import type { Context } from 'hono';
 import { HTTPException } from 'hono/http-exception';
 import type { ZodType } from 'zod';

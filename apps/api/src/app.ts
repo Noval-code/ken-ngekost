@@ -15,6 +15,7 @@ import { invoiceRoutes } from './routes/invoices';
 import { leaseRoutes } from './routes/leases';
 import { meRoutes } from './routes/me';
 import { memberRoutes } from './routes/members';
+import { notificationRoutes } from './routes/notifications';
 import { organizationRoutes } from './routes/organizations';
 import { paymentRoutes } from './routes/payments';
 import { propertyRoutes } from './routes/properties';
@@ -76,6 +77,7 @@ export function createApp(options: AppOptions) {
   app.route('/api/dashboard', dashboardRoutes);
   app.route('/api/reports', reportRoutes);
   app.route('/api/scheduler', schedulerRoutes);
+  app.route('/api/notifications', notificationRoutes);
 
   app.notFound((c) => {
     if (c.req.path.startsWith('/api/')) {

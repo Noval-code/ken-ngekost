@@ -47,13 +47,13 @@ importers:
       '@hono/zod-validator':
         specifier: ^0.9.1
         version: 0.9.1(hono@4.13.13)(zod@4.6.7)
-      '@kost/database':
+      '@panggora/database':
         specifier: workspace:*
         version: link:../../packages/database
-      '@kost/shared':
+      '@panggora/shared':
         specifier: workspace:*
         version: link:../../packages/shared
-      '@kost/validation':
+      '@panggora/validation':
         specifier: workspace:*
         version: link:../../packages/validation
       better-auth:
@@ -102,7 +102,7 @@ importers:
 
   apps/web:
     dependencies:
-      '@kost/shared':
+      '@panggora/shared':
         specifier: workspace:*
         version: link:../../packages/shared
       lucide-svelte:
@@ -179,7 +179,7 @@ importers:
 
   packages/validation:
     dependencies:
-      '@kost/shared':
+      '@panggora/shared':
         specifier: workspace:*
         version: link:../shared
       zod:

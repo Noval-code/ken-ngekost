@@ -45,7 +45,7 @@
   }
 </script>
 
-<svelte:head><title>Kamar {data.room.roomNumber} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Kamar {data.room.roomNumber} · Panggora</title></svelte:head>
 
 <div class="mb-4 flex flex-wrap items-center gap-3">
   <a

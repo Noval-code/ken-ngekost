@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "kost-web",
+  "name": "panggora-web",
   "main": ".svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2026-10-21",
   "compatibility_flags": ["nodejs_compat"],
@@ -12,6 +12,6 @@
     "enabled": true,
   },
   "vars": {
-    "API_BASE_URL": "https://kost-api.example.workers.dev",
+    "API_BASE_URL": "https://panggora.my.id",
   },
 }

@@ -1,5 +1,5 @@
-import { organizations } from '@kost/database';
-import { updateOrganizationSchema } from '@kost/validation';
+import { organizations } from '@panggora/database';
+import { updateOrganizationSchema } from '@panggora/validation';
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { requireRole } from '../lib/access';

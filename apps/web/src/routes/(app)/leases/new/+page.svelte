@@ -55,7 +55,7 @@
   }
 </script>
 
-<svelte:head><title>Kontrak baru · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Kontrak baru · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

@@ -3,10 +3,10 @@ import {
   organizations,
   properties,
   propertyAssignments,
-} from '@kost/database';
+} from '@panggora/database';
 import { and, eq, inArray, sql } from 'drizzle-orm';
 import type { Context, MiddlewareHandler } from 'hono';
-import type { OrgRole } from '@kost/shared';
+import type { OrgRole } from '@panggora/shared';
 import type { AppVariables, RequestContext } from '../types';
 import { fail } from './http';
 

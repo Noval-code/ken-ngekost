@@ -1,6 +1,6 @@
-import { invoiceItems, invoices, leases, rooms } from '@kost/database';
-import type { BillingPeriod } from '@kost/shared';
-import { formatIndonesianDate } from '@kost/shared';
+import { invoiceItems, invoices, leases, rooms } from '@panggora/database';
+import type { BillingPeriod } from '@panggora/shared';
+import { formatIndonesianDate } from '@panggora/shared';
 import { eq } from 'drizzle-orm';
 import type { DbExecutor } from '../types';
 import { writeAuditForActor } from './audit';

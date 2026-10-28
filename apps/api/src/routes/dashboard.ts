@@ -1,6 +1,6 @@
-import { invoices, leases, properties, rooms, tenants } from '@kost/database';
-import { dashboardQuery } from '@kost/validation';
-import { monthRange, todayIso } from '@kost/shared';
+import { invoices, leases, properties, rooms, tenants } from '@panggora/database';
+import { dashboardQuery } from '@panggora/validation';
+import { monthRange, todayIso } from '@panggora/shared';
 import { and, eq, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { assertPropertyAccess } from '../lib/access';

@@ -51,7 +51,7 @@
   }
 </script>
 
-<svelte:head><title>Catat pembayaran · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Catat pembayaran · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

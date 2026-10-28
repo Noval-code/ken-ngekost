@@ -41,3 +41,15 @@ export const DEFAULT_EXPENSE_CATEGORIES = [
 
 export const MAX_PAGE_SIZE = 100;
 export const DEFAULT_PAGE_SIZE = 25;
+
+export const NOTIFICATION_TYPES = [
+  'invoice_issued',
+  'payment_received',
+  'invoice_overdue',
+  'lease_expiring',
+  'lease_ended',
+  'deposit_received',
+  'deposit_refunded',
+  'system',
+] as const;
+export type NotificationType = (typeof NOTIFICATION_TYPES)[number];

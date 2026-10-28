@@ -1,5 +1,5 @@
 {
-  "name": "@kost/validation",
+  "name": "@panggora/validation",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -7,7 +7,7 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@kost/shared": "workspace:*",
+    "@panggora/shared": "workspace:*",
     "zod": "^4.6.7"
   }
 }

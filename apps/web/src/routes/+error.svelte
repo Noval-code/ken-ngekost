@@ -3,7 +3,7 @@
   import { ArrowLeft, SearchX } from 'lucide-svelte';
 </script>
 
-<svelte:head><title>{page.status} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>{page.status} · Panggora</title></svelte:head>
 
 <div class="flex min-h-dvh items-center justify-center px-5 py-10">
   <div class="app-card w-full max-w-md p-8 text-center">

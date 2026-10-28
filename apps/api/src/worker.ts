@@ -1,4 +1,4 @@
-import { createPgDatabase } from '@kost/database';
+import { createPgDatabase } from '@panggora/database';
 import { createApp } from './app';
 import { createAuth } from './auth';
 import { resolveEnv, type ApiEnv } from './env';

@@ -15,7 +15,7 @@
   );
 </script>
 
-<svelte:head><title>Tagihan · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Tagihan · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Keuangan"

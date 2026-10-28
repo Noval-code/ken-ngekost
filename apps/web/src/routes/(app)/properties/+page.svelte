@@ -37,7 +37,7 @@
   }
 </script>
 
-<svelte:head><title>Properti · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Properti · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Lokasi"

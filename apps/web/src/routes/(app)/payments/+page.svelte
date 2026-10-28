@@ -15,7 +15,7 @@
   );
 </script>
 
-<svelte:head><title>Pembayaran · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Pembayaran · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Keuangan"

@@ -40,7 +40,7 @@
   }
 </script>
 
-<svelte:head><title>{data.invoice.invoiceNumber} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>{data.invoice.invoiceNumber} · Panggora</title></svelte:head>
 
 <div class="mb-4 flex items-center justify-between gap-3">
   <a

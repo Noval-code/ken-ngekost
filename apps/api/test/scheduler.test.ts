@@ -10,7 +10,7 @@ import {
   rooms,
   tenants,
   users,
-} from '@kost/database';
+} from '@panggora/database';
 import { eq } from 'drizzle-orm';
 import { randomUUID } from 'node:crypto';
 import { resolve } from 'node:path';

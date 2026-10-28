@@ -2,7 +2,7 @@
   import { ShieldX } from 'lucide-svelte';
 </script>
 
-<svelte:head><title>Akses ditolak · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Akses ditolak · Panggora</title></svelte:head>
 
 <div class="flex min-h-dvh items-center justify-center px-5">
   <div class="app-card max-w-md p-8 text-center">

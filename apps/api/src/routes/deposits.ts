@@ -1,6 +1,6 @@
-import { depositTransactions, deposits, leases, properties, rooms, tenants } from '@kost/database';
-import { addMoney, compareMoney, toMoneyString } from '@kost/shared';
-import { receiveDepositSchema, refundDepositSchema } from '@kost/validation';
+import { depositTransactions, deposits, leases, properties, rooms, tenants } from '@panggora/database';
+import { addMoney, compareMoney, toMoneyString } from '@panggora/shared';
+import { receiveDepositSchema, refundDepositSchema } from '@panggora/validation';
 import { and, count, desc, eq, inArray, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';

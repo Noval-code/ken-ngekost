@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 test('owner can sign in and browse properties', async ({ page }) => {
   await page.goto('/login');
   await page.waitForLoadState('networkidle');
-  await page.locator('#email').fill('demo@kost.local');
+  await page.locator('#email').fill('demo@panggora.my.id');
   await page.locator('#password').fill('DemoPass12345');
   await page.getByRole('button', { name: 'Masuk' }).click();
 

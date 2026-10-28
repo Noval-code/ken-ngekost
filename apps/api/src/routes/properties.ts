@@ -1,5 +1,5 @@
-import { properties } from '@kost/database';
-import { createPropertySchema, paginationQuery, updatePropertySchema } from '@kost/validation';
+import { properties } from '@panggora/database';
+import { createPropertySchema, paginationQuery, updatePropertySchema } from '@panggora/validation';
 import { and, count, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';

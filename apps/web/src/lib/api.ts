@@ -10,12 +10,12 @@ export class ApiError extends Error {
 }
 
 function organizationId(): string | null {
-  const match = document.cookie.match(/(?:^|;\s*)kost_org=([^;]+)/);
+  const match = document.cookie.match(/(?:^|;\s*)panggora_org=([^;]+)/);
   return match?.[1] ? decodeURIComponent(match[1]) : null;
 }
 
 export function setOrganizationCookie(id: string) {
-  document.cookie = `kost_org=${encodeURIComponent(id)}; path=/; max-age=31536000; samesite=lax`;
+  document.cookie = `panggora_org=${encodeURIComponent(id)}; path=/; max-age=31536000; samesite=lax`;
 }
 
 export async function api<T>(

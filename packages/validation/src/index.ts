@@ -5,7 +5,7 @@ import {
   ORG_ROLES,
   PAYMENT_METHODS,
   isIsoDate,
-} from '@kost/shared';
+} from '@panggora/shared';
 
 const nonEmpty = (max = 255) => z.string().trim().min(1).max(max);
 const optionalText = (max = 2000) =>
@@ -182,6 +182,12 @@ export const dashboardQuery = z.object({
   from: isoDate.optional(),
   to: isoDate.optional(),
   propertyId: z.string().uuid().optional(),
+});
+
+export const notificationListQuery = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(MAX_PAGE_SIZE).default(DEFAULT_PAGE_SIZE),
+  unreadOnly: z.enum(['true', 'false']).default('false'),
 });
 
 export type PaginationQuery = z.infer<typeof paginationQuery>;

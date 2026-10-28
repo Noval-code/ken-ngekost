@@ -1,12 +1,12 @@
 import { drizzleAdapter } from '@better-auth/drizzle-adapter';
-import type { AppDatabase } from '@kost/database';
-import { schema } from '@kost/database';
+import type { AppDatabase } from '@panggora/database';
+import { schema } from '@panggora/database';
 import { betterAuth } from 'better-auth';
 import type { ResolvedEnv } from './env';
 
 export function createAuth(db: AppDatabase, env: ResolvedEnv) {
   return betterAuth({
-    appName: 'Kost Management',
+    appName: 'Panggora',
     secret: env.authSecret,
     baseURL: env.authUrl,
     basePath: '/api/auth',

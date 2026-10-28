@@ -6,9 +6,9 @@ import {
   properties,
   rooms,
   tenants,
-} from '@kost/database';
-import { billablePeriods, firstBillablePeriodEnd, formatIndonesianDate } from '@kost/shared';
-import { createLeaseSchema, endLeaseSchema, paginationQuery } from '@kost/validation';
+} from '@panggora/database';
+import { billablePeriods, firstBillablePeriodEnd, formatIndonesianDate } from '@panggora/shared';
+import { createLeaseSchema, endLeaseSchema, paginationQuery } from '@panggora/validation';
 import { and, count, desc, eq, inArray, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
@@ -18,6 +18,11 @@ import { isUniqueViolation } from '../lib/db-errors';
 import { fail, paginated, paginationFrom, parseJson, parseQuery } from '../lib/http';
 import { qualifiedColumn } from '../lib/sql';
 import { createInvoiceForPeriod } from '../lib/invoices';
+import {
+  notifyOrganizationMembers,
+  invoiceIssuedNotification,
+  depositReceivedNotification,
+} from '../lib/notifications';
 import type { AppVariables } from '../types';
 
 export const leaseRoutes = new Hono<{ Variables: AppVariables }>();
@@ -198,6 +203,42 @@ leaseRoutes.post('/', async (c) => {
           invoiceId: invoice.id,
         },
       });
+
+      const [roomInfo] = await tx
+        .select({ propertyName: properties.name })
+        .from(properties)
+        .where(eq(properties.id, room.propertyId))
+        .limit(1);
+
+      await notifyOrganizationMembers(
+        tx,
+        ctx.organization.id,
+        invoiceIssuedNotification({
+          tenantName: tenant.name,
+          roomNumber: room.room.roomNumber,
+          propertyName: roomInfo?.propertyName ?? '',
+          periodStart: period.start,
+          periodEnd: period.end,
+          totalAmount: lease.rentAmount,
+          invoiceId: invoice.id,
+          invoiceNumber: invoice.invoiceNumber,
+        }),
+        { propertyId: room.propertyId },
+      );
+
+      if (Number(lease.depositAmount) > 0) {
+        await notifyOrganizationMembers(
+          tx,
+          ctx.organization.id,
+          depositReceivedNotification({
+            tenantName: tenant.name,
+            roomNumber: room.room.roomNumber,
+            amount: lease.depositAmount,
+            depositId: lease.id,
+          }),
+          { propertyId: room.propertyId },
+        );
+      }
 
       return lease.id;
     });

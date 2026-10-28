@@ -7,7 +7,7 @@ import {
   isPeriodBillable,
   periodAt,
   toMoneyString,
-} from '@kost/shared';
+} from '@panggora/shared';
 import { describe, expect, it } from 'vitest';
 
 describe('date helpers', () => {

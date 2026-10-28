@@ -4,8 +4,8 @@ import {
   organizationMembers,
   organizations,
   users,
-} from '@kost/database';
-import { DEFAULT_EXPENSE_CATEGORIES } from '@kost/shared';
+} from '@panggora/database';
+import { DEFAULT_EXPENSE_CATEGORIES } from '@panggora/shared';
 import { config } from 'dotenv';
 import { resolve } from 'node:path';
 import { createAuth } from '../src/auth';

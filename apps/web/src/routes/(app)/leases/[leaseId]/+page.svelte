@@ -43,7 +43,7 @@
   }
 </script>
 
-<svelte:head><title>Kontrak {data.lease.tenantName} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Kontrak {data.lease.tenantName} · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

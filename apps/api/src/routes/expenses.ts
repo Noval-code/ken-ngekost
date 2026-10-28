@@ -1,9 +1,9 @@
-import { expenseCategories, expenses, properties } from '@kost/database';
+import { expenseCategories, expenses, properties } from '@panggora/database';
 import {
   createExpenseCategorySchema,
   createExpenseSchema,
   updateExpenseSchema,
-} from '@kost/validation';
+} from '@panggora/validation';
 import { and, count, desc, eq, gte, inArray, lte, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';

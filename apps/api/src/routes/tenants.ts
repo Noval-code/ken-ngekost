@@ -1,5 +1,5 @@
-import { invoices, leases, properties, rooms, tenants } from '@kost/database';
-import { createTenantSchema, paginationQuery, updateTenantSchema } from '@kost/validation';
+import { invoices, leases, properties, rooms, tenants } from '@panggora/database';
+import { createTenantSchema, paginationQuery, updateTenantSchema } from '@panggora/validation';
 import { and, count, desc, eq, ilike, inArray, or, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { requireRole } from '../lib/access';

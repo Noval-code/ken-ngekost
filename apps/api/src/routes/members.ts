@@ -1,5 +1,5 @@
-import { organizationMembers, propertyAssignments, users } from '@kost/database';
-import { createMemberSchema, updateMemberSchema } from '@kost/validation';
+import { organizationMembers, propertyAssignments, users } from '@panggora/database';
+import { createMemberSchema, updateMemberSchema } from '@panggora/validation';
 import { and, eq, inArray } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { assertPropertiesInOrganization, requireRole } from '../lib/access';

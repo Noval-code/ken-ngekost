@@ -35,7 +35,7 @@
   }
 </script>
 
-<svelte:head><title>Penghuni · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Penghuni · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Orang"

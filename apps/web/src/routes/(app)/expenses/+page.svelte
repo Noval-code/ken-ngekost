@@ -88,7 +88,7 @@
   }
 </script>
 
-<svelte:head><title>Pengeluaran · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Pengeluaran · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Keuangan"

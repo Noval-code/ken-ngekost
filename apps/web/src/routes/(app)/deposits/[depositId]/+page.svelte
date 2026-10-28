@@ -64,7 +64,7 @@
   }
 </script>
 
-<svelte:head><title>Deposit {data.deposit.tenantName} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Deposit {data.deposit.tenantName} · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "kost-api",
+  "name": "panggora-api",
   "main": "src/worker.ts",
   "compatibility_date": "2026-10-21",
   "compatibility_flags": ["nodejs_compat"],
@@ -17,8 +17,8 @@
     "crons": ["0 1 * * *"],
   },
   "vars": {
-    "BETTER_AUTH_URL": "https://kost-api.example.workers.dev",
-    "WEB_URL": "https://kost-web.example.workers.dev",
+    "BETTER_AUTH_URL": "https://panggora.my.id",
+    "WEB_URL": "https://panggora.my.id",
     "ENVIRONMENT": "production",
     "COOKIE_SECURE": "true",
   },

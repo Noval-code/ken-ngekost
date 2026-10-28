@@ -6,9 +6,9 @@ import {
   properties,
   rooms,
   tenants,
-} from '@kost/database';
-import { addMoney, compareMoney, toMoneyString } from '@kost/shared';
-import { createPaymentSchema, voidPaymentSchema } from '@kost/validation';
+} from '@panggora/database';
+import { addMoney, compareMoney, toMoneyString } from '@panggora/shared';
+import { createPaymentSchema, voidPaymentSchema } from '@panggora/validation';
 import { and, count, desc, eq, gte, ilike, inArray, lte, or, sql } from 'drizzle-orm';
 import { Hono } from 'hono';
 import { z } from 'zod';
@@ -17,6 +17,10 @@ import { writeAudit } from '../lib/audit';
 import { isUniqueViolation } from '../lib/db-errors';
 import { fail, paginated, paginationFrom, parseJson, parseQuery } from '../lib/http';
 import { qualifiedColumn } from '../lib/sql';
+import {
+  notifyOrganizationMembers,
+  paymentReceivedNotification,
+} from '../lib/notifications';
 import type { AppVariables } from '../types';
 
 export const paymentRoutes = new Hono<{ Variables: AppVariables }>();
@@ -238,6 +242,27 @@ paymentRoutes.post('/', async (c) => {
           })),
         },
       });
+
+      const tenantRows = await tx
+        .select({ name: tenants.name })
+        .from(paymentAllocations)
+        .innerJoin(invoices, eq(invoices.id, paymentAllocations.invoiceId))
+        .innerJoin(leases, eq(leases.id, invoices.leaseId))
+        .innerJoin(tenants, eq(tenants.id, leases.tenantId))
+        .where(eq(paymentAllocations.paymentId, payment.id));
+      const tenantNamesList = [...new Set(tenantRows.map((r) => r.name))].join(', ');
+
+      await notifyOrganizationMembers(
+        tx,
+        ctx.organization.id,
+        paymentReceivedNotification({
+          paymentNumber: payment.paymentNumber,
+          amount: payment.amount,
+          method: payment.method,
+          tenantNames: tenantNamesList || 'Penghuni',
+          paymentId: payment.id,
+        }),
+      );
 
       return { id: payment.id, duplicated: false };
     });

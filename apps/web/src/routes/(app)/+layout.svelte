@@ -5,8 +5,10 @@
   import { initials } from '#lib/format.js';
   import { toasts } from '#lib/toast.svelte.js';
   import Modal from '#lib/components/Modal.svelte';
+  import NotificationBell from '#lib/components/NotificationBell.svelte';
   import {
     BarChart3,
+    Bell,
     Building2,
     DoorOpen,
     FileText,
@@ -41,6 +43,7 @@
     { href: '/deposits', label: 'Deposit', icon: Landmark },
     { href: '/expenses', label: 'Pengeluaran', icon: ReceiptText },
     { href: '/reports', label: 'Laporan', icon: BarChart3 },
+    { href: '/notifications', label: 'Notifikasi', icon: Bell },
     { href: '/settings', label: 'Pengaturan', icon: Settings },
   ];
 
@@ -69,21 +72,22 @@
   }
 </script>
 
-<svelte:head><title>{data.me.organization.name} - Ken Ngekost</title></svelte:head>
+<svelte:head><title>{data.me.organization.name} - Panggora</title></svelte:head>
 
 <div class="min-h-dvh lg:flex">
   <aside class="hidden w-[264px] shrink-0 border-r border-line bg-surface/85 lg:flex lg:flex-col">
-    <div class="px-5 pb-4 pt-6">
+    <div class="flex items-center justify-between px-5 pb-4 pt-6">
       <a href="/" class="flex items-center gap-3">
         <span
           class="flex size-10 items-center justify-center rounded-xl bg-accent text-lg font-black text-white"
-          >K</span
+          >P</span
         >
         <span>
-          <span class="block text-[15px] font-bold leading-tight">Ken Ngekost</span>
+          <span class="block text-[15px] font-bold leading-tight">Panggora</span>
           <span class="block text-[11px] text-muted">{data.me.organization.name}</span>
         </span>
       </a>
+      <NotificationBell class="icon-btn -mr-2" />
     </div>
 
     <div class="mx-4 mb-4 rounded-xl border border-line bg-paper/70 p-3">
@@ -142,13 +146,16 @@
       <a href="/" class="flex items-center gap-2">
         <span
           class="flex size-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white"
-          >K</span
+          >P</span
         >
-        <span class="text-sm font-bold">Ken Ngekost</span>
+        <span class="text-sm font-bold">Panggora</span>
       </a>
-      <button class="icon-btn -mr-2" onclick={() => (moreOpen = true)} aria-label="Buka menu">
-        <Menu size={21} />
-      </button>
+      <div class="flex items-center gap-1 -mr-2">
+        <NotificationBell class="icon-btn" />
+        <button class="icon-btn" onclick={() => (moreOpen = true)} aria-label="Buka menu">
+          <Menu size={21} />
+        </button>
+      </div>
     </header>
 
     <main class="mx-auto w-full max-w-[1180px] px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:pb-12 lg:pt-8">

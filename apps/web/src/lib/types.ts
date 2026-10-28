@@ -199,3 +199,14 @@ export interface DashboardData {
   }>;
   definitions: Record<string, string>;
 }
+
+export interface NotificationRow {
+  id: string;
+  type: string;
+  title: string;
+  message: string;
+  metadata: Record<string, unknown>;
+  linkUrl: string | null;
+  readAt: string | null;
+  createdAt: string;
+}

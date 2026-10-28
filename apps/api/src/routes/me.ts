@@ -1,4 +1,4 @@
-import { organizationMembers, organizations } from '@kost/database';
+import { organizationMembers, organizations } from '@panggora/database';
 import { eq } from 'drizzle-orm';
 import { Hono } from 'hono';
 import type { AppContext } from '../lib/access';

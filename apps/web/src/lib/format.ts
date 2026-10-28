@@ -1,4 +1,4 @@
-export { formatIdr, formatIndonesianDate, formatIndonesianDateTime } from '@kost/shared';
+export { formatIdr, formatIndonesianDate, formatIndonesianDateTime } from '@panggora/shared';
 
 export function statusLabel(status: string): string {
   const labels: Record<string, string> = {
@@ -51,4 +51,41 @@ export function queryString(params: Record<string, string | number | undefined |
   }
   const result = search.toString();
   return result ? `?${result}` : '';
+}
+
+export function notificationIcon(type: string): string {
+  const icons: Record<string, string> = {
+    invoice_issued: 'ReceiptText',
+    payment_received: 'Wallet',
+    invoice_overdue: 'AlertCircle',
+    lease_expiring: 'Clock',
+    lease_ended: 'FileX',
+    deposit_received: 'Landmark',
+    deposit_refunded: 'Landmark',
+    system: 'Bell',
+  };
+  return icons[type] ?? 'Bell';
+}
+
+export function notificationColor(type: string): string {
+  if (['payment_received', 'deposit_received'].includes(type)) return 'text-accent';
+  if (['invoice_overdue', 'lease_expiring'].includes(type)) return 'text-danger';
+  if (['invoice_issued'].includes(type)) return 'text-amber';
+  if (['lease_ended', 'deposit_refunded'].includes(type)) return 'text-blue';
+  return 'text-muted';
+}
+
+export function timeAgo(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  if (diffMins < 1) return 'Baru saja';
+  if (diffMins < 60) return `${diffMins} menit lalu`;
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `${diffHours} jam lalu`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) return `${diffDays} hari lalu`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} minggu lalu`;
+  return new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'short' }).format(date);
 }

@@ -4,7 +4,7 @@ import {
   createPgliteDatabase,
   createPgDatabase,
   migratePglite,
-} from '@kost/database';
+} from '@panggora/database';
 import { config } from 'dotenv';
 import { resolve } from 'node:path';
 import { createApp } from './app';

@@ -29,7 +29,7 @@
   );
 </script>
 
-<svelte:head><title>Beranda · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Beranda · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Ringkasan operasional"

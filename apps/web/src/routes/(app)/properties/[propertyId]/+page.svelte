@@ -91,7 +91,7 @@
   }
 </script>
 
-<svelte:head><title>{data.property.name} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>{data.property.name} · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

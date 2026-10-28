@@ -44,7 +44,7 @@
   }
 </script>
 
-<svelte:head><title>{data.payment.paymentNumber} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>{data.payment.paymentNumber} · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

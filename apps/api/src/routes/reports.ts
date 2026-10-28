@@ -1,5 +1,5 @@
-import { formatIdr } from '@kost/shared';
-import { reportQuery } from '@kost/validation';
+import { formatIdr } from '@panggora/shared';
+import { reportQuery } from '@panggora/validation';
 import { Hono } from 'hono';
 import { assertPropertyAccess } from '../lib/access';
 import { buildReport } from '../lib/reporting';

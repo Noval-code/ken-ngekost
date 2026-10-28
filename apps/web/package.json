@@ -1,5 +1,5 @@
 {
-  "name": "@kost/web",
+  "name": "@panggora/web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -15,7 +15,7 @@
     "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@kost/shared": "workspace:*",
+    "@panggora/shared": "workspace:*",
     "lucide-svelte": "^1.0.1"
   },
   "devDependencies": {

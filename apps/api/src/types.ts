@@ -1,4 +1,4 @@
-import type { AppDatabase, Organization, OrganizationMember } from '@kost/database';
+import type { AppDatabase, Organization, OrganizationMember } from '@panggora/database';
 import type { Auth } from './auth';
 import type { ApiEnv } from './env';
 

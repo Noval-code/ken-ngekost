@@ -1,4 +1,4 @@
-import { auditLogs } from '@kost/database';
+import { auditLogs } from '@panggora/database';
 import type { RequestContext, DbExecutor } from '../types';
 
 export interface AuditInput {

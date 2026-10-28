@@ -485,6 +485,34 @@ export const scheduledJobRuns = pgTable(
   ],
 );
 
+export const notifications = pgTable(
+  'notifications',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    organizationId: uuid('organization_id')
+      .notNull()
+      .references(() => organizations.id, { onDelete: 'restrict' }),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    type: text('type').notNull(),
+    title: text('title').notNull(),
+    message: text('message').notNull(),
+    metadata: jsonb('metadata').$type<Record<string, unknown>>().default({}).notNull(),
+    linkUrl: text('link_url'),
+    readAt: timestamp('read_at', { withTimezone: true, mode: 'date' }),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' }).defaultNow().notNull(),
+  },
+  (table) => [
+    index('notifications_user_read_idx').on(table.userId, table.readAt),
+    index('notifications_org_user_created_idx').on(table.organizationId, table.userId, table.createdAt),
+    check(
+      'notifications_type_ck',
+      sql`${table.type} in ('invoice_issued', 'payment_received', 'invoice_overdue', 'lease_expiring', 'lease_ended', 'deposit_received', 'deposit_refunded', 'system')`,
+    ),
+  ],
+);
+
 export type User = typeof users.$inferSelect;
 export type Organization = typeof organizations.$inferSelect;
 export type OrganizationMember = typeof organizationMembers.$inferSelect;
@@ -496,3 +524,4 @@ export type Invoice = typeof invoices.$inferSelect;
 export type Payment = typeof payments.$inferSelect;
 export type Deposit = typeof deposits.$inferSelect;
 export type Expense = typeof expenses.$inferSelect;
+export type Notification = typeof notifications.$inferSelect;

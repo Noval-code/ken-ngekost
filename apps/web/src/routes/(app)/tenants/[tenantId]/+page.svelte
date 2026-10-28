@@ -43,7 +43,7 @@
   }
 </script>
 
-<svelte:head><title>{data.tenant.name} · Ken Ngekost</title></svelte:head>
+<svelte:head><title>{data.tenant.name} · Panggora</title></svelte:head>
 
 <div class="mb-4">
   <a

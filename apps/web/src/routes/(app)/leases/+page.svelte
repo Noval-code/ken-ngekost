@@ -9,7 +9,7 @@
   let { data }: { data: PageData } = $props();
 </script>
 
-<svelte:head><title>Kontrak · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Kontrak · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Sewa"

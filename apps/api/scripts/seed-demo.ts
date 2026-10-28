@@ -12,8 +12,8 @@ import {
   properties,
   rooms,
   tenants,
-} from '@kost/database';
-import { addDays, billablePeriods, DEFAULT_EXPENSE_CATEGORIES, todayIso } from '@kost/shared';
+} from '@panggora/database';
+import { addDays, billablePeriods, DEFAULT_EXPENSE_CATEGORIES, todayIso } from '@panggora/shared';
 import { config } from 'dotenv';
 import { resolve } from 'node:path';
 import { createAuth } from '../src/auth';
@@ -49,7 +49,7 @@ async function main() {
   const startDate = addDays(today, -40);
 
   try {
-    const email = process.env.DEMO_EMAIL ?? 'demo@kost.local';
+    const email = process.env.DEMO_EMAIL ?? 'demo@panggora.my.id';
     const password = process.env.DEMO_PASSWORD ?? 'DemoPass12345';
     const result = await auth.api.signUpEmail({
       body: { name: 'Demo Owner', email, password },
@@ -58,7 +58,7 @@ async function main() {
     const org = await db.transaction(async (tx) => {
       const [organization] = await tx
         .insert(organizations)
-        .values({ name: 'Kost Ngekost Demo', ownerUserId: result.user.id, email })
+        .values({ name: 'Kost Panggora Demo', ownerUserId: result.user.id, email })
         .returning();
       if (!organization) throw new Error('Organization insert failed');
 

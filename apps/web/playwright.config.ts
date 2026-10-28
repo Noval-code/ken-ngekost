@@ -18,7 +18,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'pnpm --filter @kost/api start',
+      command: 'pnpm --filter @panggora/api start',
       url: 'http://127.0.0.1:8787/health',
       reuseExistingServer: !process.env.CI,
       timeout: 120_000,

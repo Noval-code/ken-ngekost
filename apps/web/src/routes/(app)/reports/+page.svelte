@@ -11,7 +11,7 @@
   );
 </script>
 
-<svelte:head><title>Laporan · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Laporan · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Analisis"

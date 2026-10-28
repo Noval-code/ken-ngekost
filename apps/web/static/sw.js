@@ -1,4 +1,4 @@
-const CACHE = 'kost-shell-v1';
+const CACHE = 'panggora-shell-v1';
 const SHELL = ['/icon.svg', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {

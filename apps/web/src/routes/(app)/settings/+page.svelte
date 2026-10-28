@@ -127,7 +127,7 @@
   }
 </script>
 
-<svelte:head><title>Pengaturan · Ken Ngekost</title></svelte:head>
+<svelte:head><title>Pengaturan · Panggora</title></svelte:head>
 
 <PageHeader
   eyebrow="Sistem"
