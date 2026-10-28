@@ -505,7 +505,11 @@ export const notifications = pgTable(
   },
   (table) => [
     index('notifications_user_read_idx').on(table.userId, table.readAt),
-    index('notifications_org_user_created_idx').on(table.organizationId, table.userId, table.createdAt),
+    index('notifications_org_user_created_idx').on(
+      table.organizationId,
+      table.userId,
+      table.createdAt,
+    ),
     check(
       'notifications_type_ck',
       sql`${table.type} in ('invoice_issued', 'payment_received', 'invoice_overdue', 'lease_expiring', 'lease_ended', 'deposit_received', 'deposit_refunded', 'system')`,

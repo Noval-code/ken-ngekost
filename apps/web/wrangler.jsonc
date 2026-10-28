@@ -12,6 +12,6 @@
     "enabled": true,
   },
   "vars": {
-    "API_BASE_URL": "https://panggora.my.id",
+    "API_BASE_URL": "https://panggora-api.panggora-api.workers.dev",
   },
 }

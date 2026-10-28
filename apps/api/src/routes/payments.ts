@@ -17,10 +17,7 @@ import { writeAudit } from '../lib/audit';
 import { isUniqueViolation } from '../lib/db-errors';
 import { fail, paginated, paginationFrom, parseJson, parseQuery } from '../lib/http';
 import { qualifiedColumn } from '../lib/sql';
-import {
-  notifyOrganizationMembers,
-  paymentReceivedNotification,
-} from '../lib/notifications';
+import { notifyOrganizationMembers, paymentReceivedNotification } from '../lib/notifications';
 import type { AppVariables } from '../types';
 
 export const paymentRoutes = new Hono<{ Variables: AppVariables }>();

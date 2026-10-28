@@ -1,8 +1,4 @@
-import {
-  notifications,
-  organizationMembers,
-  propertyAssignments,
-} from '@panggora/database';
+import { notifications, organizationMembers, propertyAssignments } from '@panggora/database';
 import type { NotificationType } from '@panggora/shared';
 import { formatIdr, formatIndonesianDate } from '@panggora/shared';
 import { and, eq } from 'drizzle-orm';
@@ -61,9 +57,7 @@ export async function notifyOrganizationMembers(
       .filter((m) => m.role === 'owner' || m.role === 'admin')
       .map((m) => m.userId);
 
-    const managerMemberIds = allMembers
-      .filter((m) => m.role === 'manager')
-      .map((m) => m.memberId);
+    const managerMemberIds = allMembers.filter((m) => m.role === 'manager').map((m) => m.memberId);
 
     let assignedManagerUserIds: string[] = [];
     if (managerMemberIds.length > 0) {

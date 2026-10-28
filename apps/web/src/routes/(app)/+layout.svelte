@@ -75,7 +75,9 @@
 <svelte:head><title>{data.me.organization.name} - Panggora</title></svelte:head>
 
 <div class="min-h-dvh lg:flex">
-  <aside class="hidden w-[264px] shrink-0 border-r border-line bg-surface/85 lg:flex lg:flex-col print:hidden">
+  <aside
+    class="hidden w-[264px] shrink-0 border-r border-line bg-surface/85 lg:flex lg:flex-col print:hidden"
+  >
     <div class="flex items-center justify-between px-5 pb-4 pt-6">
       <a href="/" class="flex items-center gap-3">
         <span
@@ -158,7 +160,9 @@
       </div>
     </header>
 
-    <main class="mx-auto w-full max-w-[1180px] px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:pb-12 lg:pt-8 print:p-0 print:max-w-none">
+    <main
+      class="mx-auto w-full max-w-[1180px] px-4 pb-28 pt-5 sm:px-6 sm:pt-7 lg:pb-12 lg:pt-8 print:p-0 print:max-w-none"
+    >
       {@render children()}
     </main>
   </div>

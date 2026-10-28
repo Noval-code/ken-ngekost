@@ -81,7 +81,8 @@
         name="unreadOnly"
         onchange={(e) => (e.currentTarget.form as HTMLFormElement).submit()}
       >
-        <option value="false" selected={data.filter.unreadOnly === 'false'}>Semua notifikasi</option>
+        <option value="false" selected={data.filter.unreadOnly === 'false'}>Semua notifikasi</option
+        >
         <option value="true" selected={data.filter.unreadOnly === 'true'}>Belum dibaca</option>
       </select>
     </form>

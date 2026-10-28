@@ -7,7 +7,15 @@
   import PageHeader from '#lib/components/PageHeader.svelte';
   import StatusBadge from '#lib/components/StatusBadge.svelte';
   import Modal from '#lib/components/Modal.svelte';
-  import { ArrowLeft, Banknote, Download, FileText, LoaderCircle, Printer, XCircle } from 'lucide-svelte';
+  import {
+    ArrowLeft,
+    Banknote,
+    Download,
+    FileText,
+    LoaderCircle,
+    Printer,
+    XCircle,
+  } from 'lucide-svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();

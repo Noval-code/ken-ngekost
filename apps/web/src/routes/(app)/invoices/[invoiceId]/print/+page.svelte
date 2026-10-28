@@ -76,8 +76,16 @@
       <p class="text-xl font-bold uppercase tracking-tight text-ink">FAKTUR TAGIHAN</p>
       <p class="mt-0.5 text-sm font-bold text-accent">#{data.invoice.invoiceNumber}</p>
       <div class="mt-2 text-xs text-muted space-y-0.5">
-        <p>Tgl Terbit: <span class="font-medium text-ink">{formatIndonesianDate(data.invoice.createdAt.slice(0, 10))}</span></p>
-        <p>Jatuh Tempo: <span class="font-bold text-ink">{formatIndonesianDate(data.invoice.dueDate)}</span></p>
+        <p>
+          Tgl Terbit: <span class="font-medium text-ink"
+            >{formatIndonesianDate(data.invoice.createdAt.slice(0, 10))}</span
+          >
+        </p>
+        <p>
+          Jatuh Tempo: <span class="font-bold text-ink"
+            >{formatIndonesianDate(data.invoice.dueDate)}</span
+          >
+        </p>
       </div>
     </div>
   </div>
@@ -90,7 +98,11 @@
       <p class="text-xs text-muted">No. HP: {data.invoice.tenantPhone || '—'}</p>
       <p class="mt-2 text-xs text-ink font-medium">
         Periode Sewa:<br />
-        <span class="text-muted">{formatIndonesianDate(data.invoice.periodStart)} s/d {formatIndonesianDate(data.invoice.periodEnd)}</span>
+        <span class="text-muted"
+          >{formatIndonesianDate(data.invoice.periodStart)} s/d {formatIndonesianDate(
+            data.invoice.periodEnd,
+          )}</span
+        >
       </p>
     </div>
 
@@ -98,10 +110,14 @@
       <div>
         <p class="text-[10px] font-bold uppercase tracking-wider text-muted">UNIT / KAMAR:</p>
         <p class="mt-1 text-base font-bold text-ink">{data.invoice.propertyName}</p>
-        <p class="text-xs text-muted">Nomor Kamar: <span class="font-bold text-ink">{data.invoice.roomNumber}</span></p>
+        <p class="text-xs text-muted">
+          Nomor Kamar: <span class="font-bold text-ink">{data.invoice.roomNumber}</span>
+        </p>
       </div>
       <div class="mt-3">
-        <span class="inline-block rounded-md border px-2.5 py-1 text-[11px] font-bold tracking-wider {currentStatus.class}">
+        <span
+          class="inline-block rounded-md border px-2.5 py-1 text-[11px] font-bold tracking-wider {currentStatus.class}"
+        >
           {currentStatus.label}
         </span>
       </div>
@@ -112,7 +128,9 @@
   <div class="mt-8 overflow-hidden rounded-xl border border-line">
     <table class="w-full text-left text-sm border-collapse">
       <thead>
-        <tr class="bg-accent-soft/60 text-[11px] font-bold uppercase tracking-wider text-accent-dark">
+        <tr
+          class="bg-accent-soft/60 text-[11px] font-bold uppercase tracking-wider text-accent-dark"
+        >
           <th class="px-4 py-3 text-center w-12">No</th>
           <th class="px-4 py-3">Deskripsi Tagihan</th>
           <th class="px-4 py-3 text-right">Jumlah</th>
@@ -128,7 +146,9 @@
                 <p class="text-[10px] uppercase text-muted tracking-wide">{item.itemType}</p>
               {/if}
             </td>
-            <td class="px-4 py-3 text-right font-semibold tabular-nums text-ink">{formatIdr(item.amount)}</td>
+            <td class="px-4 py-3 text-right font-semibold tabular-nums text-ink"
+              >{formatIdr(item.amount)}</td
+            >
           </tr>
         {/each}
       </tbody>
@@ -145,7 +165,9 @@
       {#if Number(data.invoice.discountAmount) > 0}
         <div class="flex justify-between text-muted">
           <span>Diskon</span>
-          <span class="font-medium tabular-nums text-danger">−{formatIdr(data.invoice.discountAmount)}</span>
+          <span class="font-medium tabular-nums text-danger"
+            >−{formatIdr(data.invoice.discountAmount)}</span
+          >
         </div>
       {/if}
       <div class="flex justify-between border-t border-line pt-2 text-base font-bold text-accent">
@@ -156,7 +178,13 @@
         <span>Sudah Dibayar</span>
         <span class="font-semibold tabular-nums">{formatIdr(data.invoice.paidAmount)}</span>
       </div>
-      <div class="flex justify-between border-t border-dashed border-line pt-2 text-sm font-bold {Number(data.invoice.balance) > 0 ? 'text-danger' : 'text-muted'}">
+      <div
+        class="flex justify-between border-t border-dashed border-line pt-2 text-sm font-bold {Number(
+          data.invoice.balance,
+        ) > 0
+          ? 'text-danger'
+          : 'text-muted'}"
+      >
         <span>Sisa Tagihan</span>
         <span class="tabular-nums">{formatIdr(data.invoice.balance)}</span>
       </div>
@@ -172,7 +200,11 @@
           <div class="flex items-center justify-between px-3 py-2">
             <div>
               <span class="font-semibold text-ink">{alloc.paymentNumber}</span>
-              <span class="text-muted"> · {formatIndonesianDate(alloc.paidAt)} · {alloc.method === 'cash' ? 'Tunai' : 'Transfer Bank'}</span>
+              <span class="text-muted">
+                · {formatIndonesianDate(alloc.paidAt)} · {alloc.method === 'cash'
+                  ? 'Tunai'
+                  : 'Transfer Bank'}</span
+              >
               {#if alloc.reference}<span class="text-muted"> ({alloc.reference})</span>{/if}
             </div>
             <span class="font-bold tabular-nums text-green-700">{formatIdr(alloc.amount)}</span>
@@ -185,9 +217,12 @@
   <!-- Notes & Signatures -->
   <div class="mt-10 border-t border-line pt-6 grid grid-cols-2 gap-8 text-xs">
     <div>
-      <p class="font-bold text-muted uppercase tracking-wider text-[10px]">Catatan / Instruksi Pembayaran:</p>
+      <p class="font-bold text-muted uppercase tracking-wider text-[10px]">
+        Catatan / Instruksi Pembayaran:
+      </p>
       <p class="mt-1 text-muted leading-relaxed">
-        {data.invoice.notes || 'Pembayaran dapat dilakukan melalui transfer bank atau tunai kepada pengelola. Harap lakukan konfirmasi setelah melakukan pembayaran.'}
+        {data.invoice.notes ||
+          'Pembayaran dapat dilakukan melalui transfer bank atau tunai kepada pengelola. Harap lakukan konfirmasi setelah melakukan pembayaran.'}
       </p>
     </div>
     <div class="text-center flex flex-col items-center justify-between h-28">

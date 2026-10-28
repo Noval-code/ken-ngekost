@@ -115,7 +115,11 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
 
   const titleText = 'FAKTUR TAGIHAN';
   const titleWidth = textWidth(titleText, fontBold, 16);
-  drawText(titleText, width - margin - titleWidth, y, { font: fontBold, size: 16, color: colorInk });
+  drawText(titleText, width - margin - titleWidth, y, {
+    font: fontBold,
+    size: 16,
+    color: colorInk,
+  });
 
   y -= 14;
   if (data.organization.address) {
@@ -130,7 +134,9 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
   });
 
   y -= 13;
-  const contactText = [data.organization.phone, data.organization.email].filter(Boolean).join(' · ');
+  const contactText = [data.organization.phone, data.organization.email]
+    .filter(Boolean)
+    .join(' · ');
   if (contactText) {
     drawText(contactText, margin, y, { size: 9, color: colorMuted, maxWidth: 300 });
   }
@@ -280,16 +286,17 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
   y -= tableHeaderHeight;
 
   // 4. Table Rows
-  const items = data.items.length > 0
-    ? data.items
-    : [
-        {
-          description: `Sewa kamar ${data.room.roomNumber}`,
-          quantity: '1',
-          unitPrice: data.invoice.totalAmount,
-          amount: data.invoice.totalAmount,
-        },
-      ];
+  const items =
+    data.items.length > 0
+      ? data.items
+      : [
+          {
+            description: `Sewa kamar ${data.room.roomNumber}`,
+            quantity: '1',
+            unitPrice: data.invoice.totalAmount,
+            amount: data.invoice.totalAmount,
+          },
+        ];
 
   let rowIndex = 0;
   for (const item of items) {
@@ -389,7 +396,11 @@ export async function generateInvoicePdf(data: InvoicePdfData): Promise<Uint8Arr
     for (const alloc of data.allocations) {
       const methodLabel = alloc.method === 'cash' ? 'Tunai' : 'Transfer Bank';
       const paymentLine = `• ${formatIndonesianDate(alloc.paidAt)}: ${alloc.paymentNumber} via ${methodLabel}${alloc.reference ? ` (${alloc.reference})` : ''} — ${formatIdr(alloc.amount)}`;
-      drawText(paymentLine, margin + 4, y, { size: 8.5, color: colorMuted, maxWidth: contentWidth });
+      drawText(paymentLine, margin + 4, y, {
+        size: 8.5,
+        color: colorMuted,
+        maxWidth: contentWidth,
+      });
       y -= 12;
     }
   }
