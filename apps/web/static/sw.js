@@ -21,7 +21,8 @@ self.addEventListener('fetch', (event) => {
   const request = event.request;
   const url = new URL(request.url);
   if (request.method !== 'GET' || url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith('/api/')) return;
+  // Let API and SvelteKit data requests go straight to network (never cache).
+  if (url.pathname.startsWith('/api/') || url.pathname.endsWith('__data.json')) return;
 
   if (request.mode === 'navigate') {
     event.respondWith(
@@ -37,16 +38,17 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    caches.match(request).then(
-      (cached) =>
-        cached ||
-        fetch(request).then((response) => {
+    caches.match(request).then((cached) => {
+      if (cached) return cached;
+      return fetch(request)
+        .then((response) => {
           if (response.ok && /\.(?:css|js|svg|woff2?|png|webp)$/.test(url.pathname)) {
             const copy = response.clone();
             caches.open(CACHE).then((cache) => cache.put(request, copy));
           }
           return response;
-        }),
-    ),
+        })
+        .catch(() => new Response('', { status: 503 }));
+    }),
   );
 });
