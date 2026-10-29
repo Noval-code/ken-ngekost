@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { goto, invalidateAll } from '$app/navigation';
+  import { goto } from '$app/navigation';
   import { api } from '#lib/api.js';
   import { timeAgo, notificationColor } from '#lib/format.js';
   import { notificationStore } from '#lib/notifications.svelte.js';
@@ -41,7 +41,7 @@
     try {
       await api(`/notifications/${id}/read`, { method: 'PATCH' });
       notificationStore.decrement();
-      await invalidateAll();
+      window.location.reload();
     } catch {
       toasts.error('Gagal menandai notifikasi.');
     }
@@ -51,7 +51,7 @@
     markingAll = true;
     try {
       await notificationStore.markAllRead();
-      await invalidateAll();
+      window.location.reload();
       toasts.success('Semua notifikasi ditandai sudah dibaca.');
     } catch {
       toasts.error('Gagal menandai semua notifikasi.');

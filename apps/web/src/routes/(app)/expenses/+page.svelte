@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
   import { api, ApiError } from '#lib/api.js';
   import { formatIdr, formatIndonesianDate } from '#lib/format.js';
   import { toasts } from '#lib/toast.svelte.js';
@@ -63,7 +62,7 @@
         toasts.success('Pengeluaran dicatat.');
       }
       open = false;
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal menyimpan pengeluaran.');
     } finally {
@@ -79,7 +78,7 @@
       toasts.success('Kategori ditambahkan.');
       categoryOpen = false;
       newCategory = '';
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal menambah kategori.');
     } finally {

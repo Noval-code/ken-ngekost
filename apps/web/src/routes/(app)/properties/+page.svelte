@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
   import { api, ApiError } from '#lib/api.js';
   import { toasts } from '#lib/toast.svelte.js';
   import PageHeader from '#lib/components/PageHeader.svelte';
@@ -28,7 +27,7 @@
       name = '';
       address = '';
       description = '';
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal menyimpan properti.');
     } finally {

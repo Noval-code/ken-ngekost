@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
   import { api, ApiError } from '#lib/api.js';
   import { formatIdr, formatIndonesianDate } from '#lib/format.js';
   import { toasts } from '#lib/toast.svelte.js';
@@ -34,7 +33,7 @@
       });
       toasts.success('Kontrak diakhiri. Kamar kembali tersedia.');
       endOpen = false;
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal mengakhiri kontrak.');
     } finally {

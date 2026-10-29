@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from '$app/state';
-  import { invalidateAll } from '$app/navigation';
   import { api, ApiError } from '#lib/api.js';
   import {
     formatIdr,
@@ -35,7 +34,7 @@
       });
       toasts.success('Pembayaran dibatalkan.');
       voidOpen = false;
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal membatalkan pembayaran.');
     } finally {

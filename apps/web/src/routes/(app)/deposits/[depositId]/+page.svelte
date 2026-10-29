@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
   import { api, ApiError } from '#lib/api.js';
   import { formatIdr, formatIndonesianDateTime } from '#lib/format.js';
   import { toasts } from '#lib/toast.svelte.js';
@@ -32,7 +31,7 @@
       refundOpen = false;
       amount = '';
       reason = '';
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal mencatat refund.');
     } finally {
@@ -55,7 +54,7 @@
       receiveOpen = false;
       receiveAmount = '';
       receiveNotes = '';
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal mencatat deposit.');
     } finally {

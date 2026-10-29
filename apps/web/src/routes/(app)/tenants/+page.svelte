@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { invalidateAll } from '$app/navigation';
   import { api, ApiError } from '#lib/api.js';
   import { initials } from '#lib/format.js';
   import { toasts } from '#lib/toast.svelte.js';
@@ -26,7 +25,7 @@
       name = '';
       phone = '';
       notes = '';
-      await invalidateAll();
+      window.location.reload();
     } catch (error) {
       toasts.error(error instanceof ApiError ? error.message : 'Gagal menyimpan penghuni.');
     } finally {
