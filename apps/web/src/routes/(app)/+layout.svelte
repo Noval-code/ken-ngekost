@@ -30,7 +30,7 @@
   let loggingOut = $state(false);
 
   const primaryNav = [
-    { href: '/', label: 'Beranda', icon: LayoutDashboard },
+    { href: '/dashboard', label: 'Beranda', icon: LayoutDashboard },
     { href: '/rooms', label: 'Kamar', icon: DoorOpen },
     { href: '/invoices', label: 'Tagihan', icon: ReceiptText },
     { href: '/payments', label: 'Pembayaran', icon: Wallet },
@@ -79,7 +79,7 @@
     class="hidden w-[264px] shrink-0 border-r border-line bg-surface/85 lg:flex lg:flex-col print:hidden"
   >
     <div class="flex items-center justify-between px-5 pb-4 pt-6">
-      <a href="/" class="flex items-center gap-3">
+      <a href="/dashboard" class="flex items-center gap-3">
         <span
           class="flex size-10 items-center justify-center rounded-xl bg-accent text-lg font-black text-white"
           >P</span
@@ -145,7 +145,7 @@
     <header
       class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-paper/90 px-4 backdrop-blur-md lg:hidden print:hidden"
     >
-      <a href="/" class="flex items-center gap-2">
+      <a href="/dashboard" class="flex items-center gap-2">
         <span
           class="flex size-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white"
           >P</span

@@ -5,9 +5,9 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async (event) => {
   const result = await serverApi(event, '/api/me');
   if (result.ok) {
-    redirect(303, '/');
+    redirect(303, '/dashboard');
   }
   return {
-    next: event.url.searchParams.get('next') ?? '/',
+    next: event.url.searchParams.get('next') ?? '/dashboard',
   };
 };

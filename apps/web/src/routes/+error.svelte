@@ -19,6 +19,6 @@
     <p class="mt-2 text-sm text-muted">
       {page.error?.message ?? 'Halaman yang Anda cari tidak tersedia atau sedang bermasalah.'}
     </p>
-    <a class="btn-primary mt-6" href="/"><ArrowLeft size={17} /> Kembali ke beranda</a>
+    <a class="btn-primary mt-6" href="/dashboard"><ArrowLeft size={17} /> Kembali ke beranda</a>
   </div>
 </div>

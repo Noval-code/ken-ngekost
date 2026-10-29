@@ -18,7 +18,7 @@
       await api('/auth/sign-in/email', {
         body: { email: email.trim(), password },
       });
-      window.location.href = data.next.startsWith('/') ? data.next : '/';
+      window.location.href = data.next.startsWith('/') ? data.next : '/dashboard';
     } catch (error) {
       if (error instanceof ApiError) {
         errorMessage = error.status === 401 ? 'Email atau kata sandi tidak sesuai.' : error.message;
