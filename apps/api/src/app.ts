@@ -53,6 +53,12 @@ export function createApp(options: AppOptions) {
     await next();
   });
 
+  // Prevent caching of API responses (stale data after mutations).
+  app.use('*', async (c, next) => {
+    await next();
+    c.header('Cache-Control', 'private, no-store, no-cache, must-revalidate');
+  });
+
   app.route('/health', healthRoutes);
   app.route('/api/health', healthRoutes);
 
