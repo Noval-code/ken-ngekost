@@ -35,7 +35,7 @@
 <!-- Hero: full-bleed image -->
 <section class="relative isolate overflow-hidden">
   <img
-    src="/hero.svg"
+    src="/hero.jpg"
     alt=""
     aria-hidden="true"
     class="absolute inset-0 -z-20 h-full w-full object-cover"
@@ -43,7 +43,7 @@
     decoding="async"
   />
   <!-- Overlay gradient for readability -->
-  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-paper/30 via-paper/60 to-paper"></div>
+  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 via-black/30 to-paper"></div>
   <!-- Decorative accent blob -->
   <div
     class="pointer-events-none absolute -top-24 -right-24 -z-10 size-72 rounded-full bg-accent/20 blur-3xl"
@@ -56,12 +56,12 @@
 
   <div class="mx-auto max-w-[1280px] px-4 pb-24 pt-12 sm:px-6 sm:pt-20 sm:pb-32">
     <div class="mx-auto max-w-3xl text-center" data-reveal>
-      <span class="badge-green">Manajemen kost</span>
-      <h1 class="mt-5 text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl">
+      <span class="badge bg-white/20 text-white backdrop-blur">Manajemen kost</span>
+      <h1 class="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-white drop-shadow-sm sm:text-6xl">
         Urus kost dengan tenang,<br class="hidden sm:block" />
-        <span class="text-accent">dari kamar sampai pembayaran.</span>
+        <span class="text-amber-soft">dari kamar sampai pembayaran.</span>
       </h1>
-      <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg">
+      <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/90 sm:text-lg">
         Panggora menyatukan properti, kamar, penghuni, kontrak, tagihan bulanan, pembayaran, deposit,
         pengeluaran, dan laporan kas dalam satu tempat yang mudah dipakai dari HP.
       </p>
@@ -69,7 +69,7 @@
         <a href="/login" class="btn-primary px-6">Masuk ke akun</a>
         <a href="#fitur" class="btn-secondary px-6">Lihat fitur</a>
       </div>
-      <p class="mt-4 text-xs text-muted">Akun staf dibuat oleh owner melalui halaman Pengaturan.</p>
+      <p class="mt-4 text-xs text-white/70">Akun staf dibuat oleh owner melalui halaman Pengaturan.</p>
     </div>
 
     <!-- Floating mockup card overlapping into next section -->
