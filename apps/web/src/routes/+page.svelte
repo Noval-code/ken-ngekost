@@ -108,7 +108,7 @@
 <header
   id="top"
   class="fixed inset-x-0 top-0 z-50 transition-colors duration-300 {solidNav
-    ? 'border-b border-line bg-paper/90 text-ink backdrop-blur-md'
+    ? 'border-b border-line bg-white/90 text-ink backdrop-blur-md'
     : 'bg-gradient-to-b from-black/60 via-black/25 to-transparent text-white'}"
 >
   <nav
@@ -146,7 +146,7 @@
   </nav>
 
   {#if menuOpen}
-    <div id="menu-mobile" class="border-t border-line bg-paper/95 px-4 pb-4 pt-2 backdrop-blur-md md:hidden">
+    <div id="menu-mobile" class="border-t border-line bg-white/95 px-4 pb-4 pt-2 backdrop-blur-md md:hidden">
       <div class="flex flex-col gap-1">
         <a href="#fitur" class={mobileLinkClass} onclick={closeMenu}>Fitur</a>
         <a href="#cara-kerja" class={mobileLinkClass} onclick={closeMenu}>Cara kerja</a>
@@ -176,7 +176,7 @@
   ></div>
   <!-- Smooth fade into the next section -->
   <div
-    class="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-paper"
+    class="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-white"
     aria-hidden="true"
   ></div>
 
@@ -216,19 +216,19 @@
           <span class="badge-green">Live</span>
         </div>
         <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <div class="rounded-xl border border-line bg-paper/60 p-3">
+          <div class="rounded-xl border border-line bg-neutral-50 p-3">
             <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Kamar terisi</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">87%</p>
             <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
               <div class="h-full rounded-full bg-accent" style="width: 87%"></div>
             </div>
           </div>
-          <div class="rounded-xl border border-line bg-paper/60 p-3">
+          <div class="rounded-xl border border-line bg-neutral-50 p-3">
             <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Tagihan bulan ini</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums">Rp 12,4 jt</p>
             <p class="mt-1 text-[11px] text-muted">14 tagihan aktif</p>
           </div>
-          <div class="hidden rounded-xl border border-line bg-paper/60 p-3 sm:block">
+          <div class="hidden rounded-xl border border-line bg-neutral-50 p-3 sm:block">
             <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Pembayaran</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">Rp 9,8 jt</p>
             <p class="mt-1 text-[11px] text-muted">3 belum lunas</p>
@@ -338,17 +338,17 @@
     <div class="relative mt-10 grid gap-6 sm:grid-cols-3" data-reveal>
       <div class="hidden sm:block absolute top-6 left-[16%] right-[16%] h-px bg-gradient-to-r from-accent/20 via-accent to-accent/20" aria-hidden="true"></div>
       <div class="relative app-card p-5">
-        <span class="relative z-10 flex size-11 items-center justify-center rounded-full bg-accent text-sm font-bold text-white ring-4 ring-paper">1</span>
+        <span class="relative z-10 flex size-11 items-center justify-center rounded-full bg-accent text-sm font-bold text-white ring-4 ring-white">1</span>
         <h3 class="mt-4 text-base font-bold">Tambah properti & kamar</h3>
         <p class="mt-1 text-sm text-muted">Daftarkan lokasi kost dan kamar-kamarnya.</p>
       </div>
       <div class="relative app-card p-5">
-        <span class="relative z-10 flex size-11 items-center justify-center rounded-full bg-accent text-sm font-bold text-white ring-4 ring-paper">2</span>
+        <span class="relative z-10 flex size-11 items-center justify-center rounded-full bg-accent text-sm font-bold text-white ring-4 ring-white">2</span>
         <h3 class="mt-4 text-base font-bold">Masukkan penghuni & kontrak</h3>
         <p class="mt-1 text-sm text-muted">Buat kontrak sewa dengan harga dan periode.</p>
       </div>
       <div class="relative app-card p-5">
-        <span class="relative z-10 flex size-11 items-center justify-center rounded-full bg-accent text-sm font-bold text-white ring-4 ring-paper">3</span>
+        <span class="relative z-10 flex size-11 items-center justify-center rounded-full bg-accent text-sm font-bold text-white ring-4 ring-white">3</span>
         <h3 class="mt-4 text-base font-bold">Kelola tagihan & kas</h3>
         <p class="mt-1 text-sm text-muted">Generate tagihan, catat pembayaran, lihat laporan.</p>
       </div>
@@ -356,7 +356,7 @@
   </section>
 
   <!-- Testimoni -->
-  <section id="testimoni" class="scroll-mt-20 bg-surface/70 py-14 sm:py-20">
+  <section id="testimoni" class="scroll-mt-20 border-y border-line bg-white py-14 sm:py-20">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6">
       <div class="max-w-2xl" data-reveal>
         <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Testimoni</p>
@@ -403,7 +403,7 @@
           <h2 class="text-xl font-bold sm:text-2xl">Siap mengelola kost dengan lebih tenang?</h2>
           <p class="mt-1 text-sm text-white/80">Masuk ke akun Anda dan mulai hari ini.</p>
         </div>
-        <a href="/login" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-accent transition-colors hover:bg-paper">
+        <a href="/login" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-accent transition-colors hover:bg-neutral-100">
           Masuk
         </a>
       </div>
@@ -475,6 +475,18 @@
   </footer>
 
   <style>
+    /*
+     * The landing page uses a pure white canvas instead of the app's warm
+     * paper tone. Scoped here so the dashboard keeps its original palette.
+     */
+    :global(html),
+    :global(body) {
+      background: #ffffff;
+    }
+    :global(.app-card) {
+      background-color: #ffffff;
+    }
+
     /*
      * Content is visible by default. The reveal is an animation that only
      * starts once JS adds `.is-visible`, so a failed/blocked script can never
