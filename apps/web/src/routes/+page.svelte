@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import {
+    ChevronDown,
     DoorOpen,
     FileText,
     Mail,
@@ -53,6 +54,33 @@
       name: 'Siti Rahmawati',
       role: 'Pengelola · Kost Sejahtera, Surabaya',
       initials: 'SR',
+    },
+  ];
+
+  const faqs = [
+    {
+      q: 'Apakah data kost saya aman?',
+      a: 'Data setiap organisasi terpisah dan hanya bisa diakses anggota organisasi tersebut. Setiap peran punya batas akses, dan aktivitas penting tercatat di audit log.',
+    },
+    {
+      q: 'Bisa mengelola lebih dari satu properti?',
+      a: 'Bisa. Tambahkan properti sebanyak yang Anda kelola, lalu pantau kamar, penghuni, dan tagihan per properti maupun gabungan.',
+    },
+    {
+      q: 'Apakah staf bisa ikut memakai?',
+      a: 'Bisa. Owner membuat akun staf dengan peran admin atau manager, dan aksesnya dibatasi sesuai properti yang ditugaskan.',
+    },
+    {
+      q: 'Perlu instal aplikasi dulu?',
+      a: 'Tidak perlu. Panggora berjalan di browser, jadi cukup buka dari HP atau laptop. Di HP bisa ditambahkan ke layar utama agar seperti aplikasi.',
+    },
+    {
+      q: 'Bisa dipakai dari HP?',
+      a: 'Ya. Tampilan dirancang mobile-first, jadi mencatat pembayaran atau mengecek tunggakan tetap nyaman dari layar kecil.',
+    },
+    {
+      q: 'Bagaimana tagihan bulanan dibuat?',
+      a: 'Tagihan dibuat per periode untuk kontrak yang aktif, lengkap dengan status lunas atau belum. Anda tidak perlu menghitung ulang setiap bulan.',
     },
   ];
 
@@ -115,9 +143,10 @@
     class="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6"
     aria-label="Navigasi utama"
   >
-    <a href="#top" class="flex items-center gap-2 rounded-lg" aria-label="Panggora — beranda">
+    <a href="#top" class="flex items-center gap-2 rounded-lg">
       <span
         class="flex size-9 items-center justify-center rounded-xl bg-accent text-sm font-black text-white shadow-sm"
+        aria-hidden="true"
       >
         P
       </span>
@@ -128,6 +157,7 @@
       <a href="#fitur" class={navLinkClass}>Fitur</a>
       <a href="#cara-kerja" class={navLinkClass}>Cara kerja</a>
       <a href="#testimoni" class={navLinkClass}>Testimoni</a>
+      <a href="#faq" class={navLinkClass}>FAQ</a>
       <a href="/login" class="btn-primary ml-2 px-5">Masuk</a>
     </div>
 
@@ -151,6 +181,7 @@
         <a href="#fitur" class={mobileLinkClass} onclick={closeMenu}>Fitur</a>
         <a href="#cara-kerja" class={mobileLinkClass} onclick={closeMenu}>Cara kerja</a>
         <a href="#testimoni" class={mobileLinkClass} onclick={closeMenu}>Testimoni</a>
+        <a href="#faq" class={mobileLinkClass} onclick={closeMenu}>FAQ</a>
         <a href="/login" class="btn-primary mt-2">Masuk ke akun</a>
       </div>
     </div>
@@ -190,7 +221,7 @@
       </h1>
       <p class="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/90 sm:text-lg">
         Panggora menyatukan properti, kamar, penghuni, kontrak, tagihan bulanan, pembayaran, deposit,
-        pengeluaran, dan laporan kas dalam satu tempat yang mudah dipakai dari HP.
+        pengeluaran, dan laporan kas dalam satu tempat.
       </p>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a href="/login" class="btn-primary px-6">Masuk ke akun</a>
@@ -371,7 +402,7 @@
           <figure class="app-card flex h-full flex-col p-6">
             <Quote size={26} class="text-accent/30" aria-hidden="true" />
             <blockquote class="mt-4 flex-1 text-sm leading-7 text-ink">“{t.quote}”</blockquote>
-            <div class="mt-5 flex items-center gap-1 text-amber" aria-label="5 dari 5 bintang">
+            <div class="mt-5 flex items-center gap-1 text-amber" role="img" aria-label="5 dari 5 bintang">
               {#each Array(5) as _}
                 <Star size={14} class="fill-current" aria-hidden="true" />
               {/each}
@@ -388,6 +419,42 @@
               </span>
             </figcaption>
           </figure>
+        {/each}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="scroll-mt-20 bg-white py-14 sm:py-20">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6">
+      <div class="max-w-2xl" data-reveal>
+        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">FAQ</p>
+        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Pertanyaan yang sering diajukan.</h2>
+        <p class="mt-2 text-sm text-muted">
+          Belum ketemu jawabannya? Kirim email ke
+          <a href="mailto:halo@panggora.my.id" class="font-semibold text-accent hover:underline">
+            halo@panggora.my.id
+          </a>.
+        </p>
+      </div>
+
+      <div class="mt-8 grid items-start gap-3 lg:grid-cols-2" data-reveal>
+        {#each faqs as item}
+          <details class="group app-card overflow-hidden">
+            <summary
+              class="flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-sm font-semibold text-ink transition-colors hover:bg-neutral-50 [&::-webkit-details-marker]:hidden"
+            >
+              <span>{item.q}</span>
+              <ChevronDown
+                size={18}
+                class="shrink-0 text-muted transition-transform group-open:rotate-180"
+                aria-hidden="true"
+              />
+            </summary>
+            <div class="border-t border-line px-5 py-4 text-sm leading-6 text-muted">
+              {item.a}
+            </div>
+          </details>
         {/each}
       </div>
     </div>
@@ -436,6 +503,7 @@
             <li><a href="#fitur" class="transition-colors hover:text-white">Fitur</a></li>
             <li><a href="#cara-kerja" class="transition-colors hover:text-white">Cara kerja</a></li>
             <li><a href="#testimoni" class="transition-colors hover:text-white">Testimoni</a></li>
+            <li><a href="#faq" class="transition-colors hover:text-white">FAQ</a></li>
             <li><a href="/login" class="transition-colors hover:text-white">Masuk</a></li>
           </ul>
         </nav>
