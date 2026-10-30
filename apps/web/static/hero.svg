@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 720" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Ilustrasi properti kost Panggora">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e0f3ee" />
+      <stop offset="60%" stop-color="#f6f3ec" />
+      <stop offset="100%" stop-color="#fbeed7" />
+    </linearGradient>
+    <linearGradient id="building" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0c6b5c" />
+      <stop offset="100%" stop-color="#084e44" />
+    </linearGradient>
+    <linearGradient id="building2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#245a9a" />
+      <stop offset="100%" stop-color="#1a4477" />
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fbeed7" />
+      <stop offset="100%" stop-color="#a8620a" stop-opacity="0.4" />
+    </radialGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1440" height="720" fill="url(#sky)" />
+
+  <!-- Sun -->
+  <circle cx="1180" cy="140" r="90" fill="url(#sun)" opacity="0.7" />
+  <circle cx="1180" cy="140" r="55" fill="#fbeed7" opacity="0.9" />
+
+  <!-- Clouds -->
+  <g fill="#fffdf8" opacity="0.85">
+    <ellipse cx="220" cy="120" rx="70" ry="28" />
+    <ellipse cx="270" cy="110" rx="50" ry="22" />
+    <ellipse cx="180" cy="115" rx="40" ry="18" />
+    <ellipse cx="900" cy="90" rx="80" ry="30" />
+    <ellipse cx="960" cy="80" rx="55" ry="24" />
+    <ellipse cx="850" cy="85" rx="45" ry="20" />
+  </g>
+
+  <!-- Ground -->
+  <rect y="560" width="1440" height="160" fill="#e3ded2" />
+  <rect y="560" width="1440" height="8" fill="#0c6b5c" opacity="0.3" />
+
+  <!-- Trees -->
+  <g>
+    <!-- Tree 1 -->
+    <rect x="90" y="470" width="14" height="95" fill="#68736d" />
+    <circle cx="97" cy="455" r="42" fill="#0c6b5c" opacity="0.85" />
+    <circle cx="80" cy="470" r="32" fill="#084e44" opacity="0.7" />
+    <circle cx="115" cy="468" r="30" fill="#0c6b5c" opacity="0.75" />
+    <!-- Tree 2 -->
+    <rect x="1280" y="485" width="12" height="80" fill="#68736d" />
+    <circle cx="1286" cy="472" r="38" fill="#0c6b5c" opacity="0.8" />
+    <circle cx="1270" cy="485" r="28" fill="#084e44" opacity="0.65" />
+  </g>
+
+  <!-- Building 1 (tall, left) -->
+  <g>
+    <rect x="180" y="260" width="260" height="300" rx="6" fill="url(#building)" />
+    <rect x="180" y="260" width="260" height="12" fill="#084e44" />
+    <!-- Roof -->
+    <polygon points="170,260 310,200 450,260" fill="#084e44" />
+    <!-- Windows -->
+    <g fill="#fbeed7" opacity="0.9">
+      <rect x="205" y="290" width="42" height="34" rx="3" />
+      <rect x="265" y="290" width="42" height="34" rx="3" />
+      <rect x="325" y="290" width="42" height="34" rx="3" />
+      <rect x="385" y="290" width="42" height="34" rx="3" />
+      <rect x="205" y="345" width="42" height="34" rx="3" />
+      <rect x="265" y="345" width="42" height="34" rx="3" />
+      <rect x="325" y="345" width="42" height="34" rx="3" />
+      <rect x="385" y="345" width="42" height="34" rx="3" />
+      <rect x="205" y="400" width="42" height="34" rx="3" />
+      <rect x="265" y="400" width="42" height="34" rx="3" />
+      <rect x="325" y="400" width="42" height="34" rx="3" />
+      <rect x="385" y="400" width="42" height="34" rx="3" />
+      <rect x="205" y="455" width="42" height="34" rx="3" />
+      <rect x="265" y="455" width="42" height="34" rx="3" />
+      <rect x="325" y="455" width="42" height="34" rx="3" />
+      <rect x="385" y="455" width="42" height="34" rx="3" />
+    </g>
+    <!-- Door -->
+    <rect x="285" y="510" width="50" height="50" rx="4" fill="#fbeed7" />
+    <circle cx="328" cy="535" r="3" fill="#0c6b5c" />
+  </g>
+
+  <!-- Building 2 (medium, center) -->
+  <g>
+    <rect x="520" y="320" width="220" height="240" rx="6" fill="url(#building2)" />
+    <rect x="520" y="320" width="220" height="10" fill="#1a4477" />
+    <polygon points="510,320 630,270 750,320" fill="#1a4477" />
+    <g fill="#fbeed7" opacity="0.9">
+      <rect x="545" y="345" width="38" height="30" rx="3" />
+      <rect x="600" y="345" width="38" height="30" rx="3" />
+      <rect x="655" y="345" width="38" height="30" rx="3" />
+      <rect x="545" y="395" width="38" height="30" rx="3" />
+      <rect x="600" y="395" width="38" height="30" rx="3" />
+      <rect x="655" y="395" width="38" height="30" rx="3" />
+      <rect x="545" y="445" width="38" height="30" rx="3" />
+      <rect x="600" y="445" width="38" height="30" rx="3" />
+      <rect x="655" y="445" width="38" height="30" rx="3" />
+    </g>
+    <rect x="605" y="500" width="45" height="60" rx="4" fill="#fbeed7" />
+  </g>
+
+  <!-- Building 3 (small, right) -->
+  <g>
+    <rect x="820" y="360" width="180" height="200" rx="6" fill="url(#building)" opacity="0.9" />
+    <rect x="820" y="360" width="180" height="10" fill="#084e44" />
+    <polygon points="810,360 910,315 1010,360" fill="#084e44" />
+    <g fill="#fbeed7" opacity="0.9">
+      <rect x="845" y="385" width="34" height="28" rx="3" />
+      <rect x="895" y="385" width="34" height="28" rx="3" />
+      <rect x="945" y="385" width="34" height="28" rx="3" />
+      <rect x="845" y="430" width="34" height="28" rx="3" />
+      <rect x="895" y="430" width="34" height="28" rx="3" />
+      <rect x="945" y="430" width="34" height="28" rx="3" />
+      <rect x="845" y="475" width="34" height="28" rx="3" />
+      <rect x="895" y="475" width="34" height="28" rx="3" />
+      <rect x="945" y="475" width="34" height="28" rx="3" />
+    </g>
+    <rect x="890" y="510" width="40" height="50" rx="4" fill="#fbeed7" />
+  </g>
+
+  <!-- Building 4 (far right, tall narrow) -->
+  <g opacity="0.7">
+    <rect x="1060" y="300" width="140" height="260" rx="6" fill="url(#building2)" />
+    <rect x="1060" y="300" width="140" height="10" fill="#1a4477" />
+    <g fill="#fbeed7" opacity="0.85">
+      <rect x="1080" y="325" width="30" height="26" rx="3" />
+      <rect x="1120" y="325" width="30" height="26" rx="3" />
+      <rect x="1160" y="325" width="30" height="26" rx="3" />
+      <rect x="1080" y="365" width="30" height="26" rx="3" />
+      <rect x="1120" y="365" width="30" height="26" rx="3" />
+      <rect x="1160" y="365" width="30" height="26" rx="3" />
+      <rect x="1080" y="405" width="30" height="26" rx="3" />
+      <rect x="1120" y="405" width="30" height="26" rx="3" />
+      <rect x="1160" y="405" width="30" height="26" rx="3" />
+      <rect x="1080" y="445" width="30" height="26" rx="3" />
+      <rect x="1120" y="445" width="30" height="26" rx="3" />
+      <rect x="1160" y="445" width="30" height="26" rx="3" />
+      <rect x="1080" y="485" width="30" height="26" rx="3" />
+      <rect x="1120" y="485" width="30" height="26" rx="3" />
+      <rect x="1160" y="485" width="30" height="26" rx="3" />
+    </g>
+  </g>
+
+  <!-- Path/road -->
+  <rect x="0" y="555" width="1440" height="12" fill="#fffdf8" opacity="0.6" />
+</svg>
