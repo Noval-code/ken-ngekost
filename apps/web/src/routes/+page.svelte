@@ -1,28 +1,98 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { DoorOpen, FileText, ReceiptText, ShieldCheck, Users, Wallet } from 'lucide-svelte';
+  import {
+    DoorOpen,
+    FileText,
+    Mail,
+    Menu,
+    Quote,
+    ReceiptText,
+    ShieldCheck,
+    Star,
+    Users,
+    Wallet,
+    X,
+  } from 'lucide-svelte';
+
+  let scrolled = $state(false);
+  let menuOpen = $state(false);
+
+  // The navbar is transparent over the hero photo and turns solid once the
+  // page scrolls (or while the mobile menu is open).
+  const solidNav = $derived(scrolled || menuOpen);
+
+  const navLinkClass = $derived(
+    solidNav
+      ? 'rounded-lg px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-black/5 hover:text-ink'
+      : 'rounded-lg px-3 py-2 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white',
+  );
+
+  const mobileLinkClass = $derived(
+    'block rounded-xl px-3 py-3 text-sm font-semibold transition-colors ' +
+      (solidNav ? 'text-ink hover:bg-black/5' : 'text-white hover:bg-white/10'),
+  );
+
+  const testimonials = [
+    {
+      quote:
+        'Dulu saya catat tagihan di buku dan sering ada yang terlewat. Sekarang semua kamar, kontrak, dan status bayar kelihatan dalam satu layar.',
+      name: 'Rani Kusuma',
+      role: 'Owner · Kost Melati, Bandung',
+      initials: 'RK',
+    },
+    {
+      quote:
+        'Yang paling membantu itu rekap kas bulanan. Saya tidak perlu lagi menghitung ulang pemasukan dan pengeluaran secara manual.',
+      name: 'Adi Nugroho',
+      role: 'Owner · Griya Cempaka, Yogyakarta',
+      initials: 'AN',
+    },
+    {
+      quote:
+        'Staf saya cukup buka dari HP untuk mencatat pembayaran. Riwayatnya rapi dan saya tetap bisa mengawasi lewat laporan.',
+      name: 'Siti Rahmawati',
+      role: 'Pengelola · Kost Sejahtera, Surabaya',
+      initials: 'SR',
+    },
+  ];
 
   // Subtle fade-in on scroll. Content is fully visible by default; the
   // animation is a pure enhancement, so the page never depends on JS.
   onMount(() => {
-    if (typeof IntersectionObserver === 'undefined') return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const onScroll = () => {
+      scrolled = window.scrollY > 12;
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
 
-    const targets = document.querySelectorAll('[data-reveal]');
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-visible');
-            io.unobserve(e.target);
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let io: IntersectionObserver | undefined;
+
+    if (!reduceMotion && typeof IntersectionObserver !== 'undefined') {
+      const targets = document.querySelectorAll('[data-reveal]');
+      io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-visible');
+              io?.unobserve(e.target);
+            }
           }
-        }
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
-    );
-    targets.forEach((t) => io.observe(t));
-    return () => io.disconnect();
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
+      );
+      targets.forEach((t) => io?.observe(t));
+    }
+
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      io?.disconnect();
+    };
   });
+
+  function closeMenu() {
+    menuOpen = false;
+  }
 </script>
 
 <svelte:head>
@@ -33,6 +103,59 @@
   />
   <link rel="preload" as="image" href="/hero.jpg" fetchpriority="high" />
 </svelte:head>
+
+<!-- Navbar -->
+<header
+  id="top"
+  class="fixed inset-x-0 top-0 z-50 transition-colors duration-300 {solidNav
+    ? 'border-b border-line bg-paper/90 text-ink backdrop-blur-md'
+    : 'bg-gradient-to-b from-black/60 via-black/25 to-transparent text-white'}"
+>
+  <nav
+    class="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6"
+    aria-label="Navigasi utama"
+  >
+    <a href="#top" class="flex items-center gap-2 rounded-lg" aria-label="Panggora — beranda">
+      <span
+        class="flex size-9 items-center justify-center rounded-xl bg-accent text-sm font-black text-white shadow-sm"
+      >
+        P
+      </span>
+      <span class="text-lg font-bold tracking-tight">Panggora</span>
+    </a>
+
+    <div class="hidden items-center gap-1 md:flex">
+      <a href="#fitur" class={navLinkClass}>Fitur</a>
+      <a href="#cara-kerja" class={navLinkClass}>Cara kerja</a>
+      <a href="#testimoni" class={navLinkClass}>Testimoni</a>
+      <a href="/login" class="btn-primary ml-2 px-5">Masuk</a>
+    </div>
+
+    <button
+      type="button"
+      class="inline-flex size-11 items-center justify-center rounded-xl transition-colors md:hidden {solidNav
+        ? 'text-ink hover:bg-black/5'
+        : 'text-white hover:bg-white/10'}"
+      aria-expanded={menuOpen}
+      aria-controls="menu-mobile"
+      aria-label={menuOpen ? 'Tutup menu' : 'Buka menu'}
+      onclick={() => (menuOpen = !menuOpen)}
+    >
+      {#if menuOpen}<X size={22} />{:else}<Menu size={22} />{/if}
+    </button>
+  </nav>
+
+  {#if menuOpen}
+    <div id="menu-mobile" class="border-t border-line bg-paper/95 px-4 pb-4 pt-2 backdrop-blur-md md:hidden">
+      <div class="flex flex-col gap-1">
+        <a href="#fitur" class={mobileLinkClass} onclick={closeMenu}>Fitur</a>
+        <a href="#cara-kerja" class={mobileLinkClass} onclick={closeMenu}>Cara kerja</a>
+        <a href="#testimoni" class={mobileLinkClass} onclick={closeMenu}>Testimoni</a>
+        <a href="/login" class="btn-primary mt-2">Masuk ke akun</a>
+      </div>
+    </div>
+  {/if}
+</header>
 
 <!-- Hero: full-bleed image -->
 <section class="relative isolate overflow-hidden bg-ink">
@@ -57,13 +180,10 @@
     aria-hidden="true"
   ></div>
 
-  <div class="mx-auto flex max-w-[1280px] flex-col justify-center px-4 pb-16 pt-14 sm:px-6 sm:pb-24 sm:pt-24">
+  <div class="mx-auto flex max-w-[1280px] flex-col justify-center px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-32">
     <div class="mx-auto max-w-3xl text-center" data-reveal>
-      <span class="badge bg-white/15 text-white ring-1 ring-white/30 backdrop-blur-sm">
-        Manajemen kost
-      </span>
       <h1
-        class="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-white [text-shadow:0_2px_28px_rgb(0_0_0/0.55)] sm:text-6xl"
+        class="text-4xl font-bold leading-[1.05] tracking-tight text-white [text-shadow:0_2px_28px_rgb(0_0_0/0.55)] sm:text-6xl"
       >
         Urus kost dengan tenang,<br class="hidden sm:block" />
         <span class="text-amber-soft">dari kamar sampai pembayaran.</span>
@@ -81,7 +201,6 @@
           Lihat fitur
         </a>
       </div>
-      <p class="mt-4 text-xs text-white/75">Akun staf dibuat oleh owner melalui halaman Pengaturan.</p>
     </div>
 
     <!-- Floating mockup card overlapping into next section -->
@@ -129,9 +248,10 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Stats -->
+<!-- Stats -->
   <section class="mx-auto max-w-[1280px] px-4 py-10 sm:px-6">
     <div class="grid gap-4 sm:grid-cols-4" data-reveal>
       <div class="app-card p-5 text-center">
@@ -154,7 +274,7 @@
   </section>
 
   <!-- Fitur bento -->
-  <section id="fitur" class="mx-auto max-w-[1280px] px-4 py-12 sm:px-6">
+  <section id="fitur" class="mx-auto max-w-[1280px] scroll-mt-20 px-4 py-12 sm:px-6">
     <div class="max-w-2xl" data-reveal>
       <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Fitur</p>
       <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Semua yang Anda butuhkan untuk mengelola kost.</h2>
@@ -210,7 +330,7 @@
   </section>
 
   <!-- Cara kerja -->
-  <section class="mx-auto max-w-[1280px] px-4 py-12 sm:px-6">
+  <section id="cara-kerja" class="mx-auto max-w-[1280px] scroll-mt-20 px-4 py-12 sm:px-6">
     <div class="max-w-2xl" data-reveal>
       <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Cara kerja</p>
       <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Mulai dalam tiga langkah.</h2>
@@ -235,6 +355,44 @@
     </div>
   </section>
 
+  <!-- Testimoni -->
+  <section id="testimoni" class="scroll-mt-20 bg-surface/70 py-14 sm:py-20">
+    <div class="mx-auto max-w-[1280px] px-4 sm:px-6">
+      <div class="max-w-2xl" data-reveal>
+        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Testimoni</p>
+        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Dipakai sehari-hari oleh pengelola kost.</h2>
+        <p class="mt-2 text-sm text-muted">
+          Cerita singkat dari owner dan staf yang memindahkan pencatatan manual ke Panggora.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal>
+        {#each testimonials as t}
+          <figure class="app-card flex h-full flex-col p-6">
+            <Quote size={26} class="text-accent/30" aria-hidden="true" />
+            <blockquote class="mt-4 flex-1 text-sm leading-7 text-ink">“{t.quote}”</blockquote>
+            <div class="mt-5 flex items-center gap-1 text-amber" aria-label="5 dari 5 bintang">
+              {#each Array(5) as _}
+                <Star size={14} class="fill-current" aria-hidden="true" />
+              {/each}
+            </div>
+            <figcaption class="mt-4 flex items-center gap-3 border-t border-line pt-4">
+              <span
+                class="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft text-xs font-bold text-accent-dark"
+              >
+                {t.initials}
+              </span>
+              <span class="min-w-0">
+                <span class="block text-sm font-bold text-ink">{t.name}</span>
+                <span class="block text-xs text-muted">{t.role}</span>
+              </span>
+            </figcaption>
+          </figure>
+        {/each}
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="mx-auto max-w-[1280px] px-4 py-12 sm:px-6">
     <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-accent-dark p-6 text-white shadow-[var(--shadow-card)] sm:p-10" data-reveal>
@@ -253,10 +411,66 @@
   </section>
 
   <!-- Footer -->
-  <footer class="border-t border-line">
-    <div class="mx-auto flex max-w-[1280px] flex-col items-start gap-2 px-4 py-6 text-xs text-muted sm:flex-row sm:items-center sm:justify-between sm:px-6">
-      <p>© {new Date().getFullYear()} Panggora. Manajemen kost.</p>
-      <p>Dibuat untuk owner & staf kost.</p>
+  <footer class="border-t border-white/10 bg-ink text-white/70">
+    <div class="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 sm:py-16">
+      <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="max-w-sm lg:col-span-2">
+          <a href="#top" class="inline-flex items-center gap-2 rounded-lg text-white">
+            <span
+              class="flex size-9 items-center justify-center rounded-xl bg-accent text-sm font-black text-white"
+            >
+              P
+            </span>
+            <span class="text-lg font-bold tracking-tight">Panggora</span>
+          </a>
+          <p class="mt-4 text-sm leading-6">
+            Manajemen kost yang tenang: properti, kamar, penghuni, kontrak, tagihan, pembayaran, dan
+            laporan kas dalam satu tempat.
+          </p>
+          <p class="mt-4 text-xs text-white/50">Dibuat untuk owner &amp; staf kost di Indonesia.</p>
+        </div>
+
+        <nav aria-label="Produk">
+          <h2 class="text-xs font-bold uppercase tracking-[0.16em] text-white">Produk</h2>
+          <ul class="mt-4 space-y-3 text-sm">
+            <li><a href="#fitur" class="transition-colors hover:text-white">Fitur</a></li>
+            <li><a href="#cara-kerja" class="transition-colors hover:text-white">Cara kerja</a></li>
+            <li><a href="#testimoni" class="transition-colors hover:text-white">Testimoni</a></li>
+            <li><a href="/login" class="transition-colors hover:text-white">Masuk</a></li>
+          </ul>
+        </nav>
+
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-[0.16em] text-white">Bantuan</h2>
+          <ul class="mt-4 space-y-3 text-sm">
+            <li>
+              <a
+                href="mailto:halo@panggora.my.id"
+                class="inline-flex items-center gap-2 transition-colors hover:text-white"
+              >
+                <Mail size={16} aria-hidden="true" />
+                halo@panggora.my.id
+              </a>
+            </li>
+            <li>
+              <a
+                href="/api/health"
+                class="inline-flex items-center gap-2 transition-colors hover:text-white"
+              >
+                <span class="size-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
+                Status layanan
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div
+        class="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between"
+      >
+        <p>© {new Date().getFullYear()} Panggora. Hak cipta dilindungi.</p>
+        <a href="#top" class="transition-colors hover:text-white">Kembali ke atas ↑</a>
+      </div>
     </div>
   </footer>
 
