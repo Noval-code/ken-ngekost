@@ -2,7 +2,8 @@
   import { onMount } from 'svelte';
   import { DoorOpen, FileText, ReceiptText, ShieldCheck, Users, Wallet } from 'lucide-svelte';
 
-  // Subtle fade-in on scroll for sections.
+  // Subtle fade-in on scroll. Content is fully visible by default; the
+  // animation is a pure enhancement, so the page never depends on JS.
   onMount(() => {
     if (typeof IntersectionObserver === 'undefined') return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -17,7 +18,7 @@
           }
         }
       },
-      { threshold: 0.15 },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
     );
     targets.forEach((t) => io.observe(t));
     return () => io.disconnect();
@@ -30,34 +31,40 @@
     name="description"
     content="Panggora membantu owner kost mengelola kamar, penghuni, tagihan, pembayaran, deposit, pengeluaran, dan laporan kas dari satu tempat."
   />
+  <link rel="preload" as="image" href="/hero.jpg" fetchpriority="high" />
 </svelte:head>
 
 <!-- Hero: full-bleed image -->
-<section class="relative isolate overflow-hidden">
+<section class="relative isolate overflow-hidden bg-ink">
   <img
     src="/hero.jpg"
     alt=""
     aria-hidden="true"
-    class="absolute inset-0 -z-20 h-full w-full object-cover"
+    class="absolute inset-0 -z-20 h-full w-full object-cover object-center"
     loading="eager"
+    fetchpriority="high"
     decoding="async"
   />
-  <!-- Overlay gradient for readability -->
-  <div class="absolute inset-0 -z-10 bg-gradient-to-b from-black/40 via-black/30 to-paper"></div>
-  <!-- Decorative accent blob -->
+  <!-- Scrim: keeps the copy readable on top of any photo -->
+  <div class="absolute inset-0 -z-10 bg-black/60" aria-hidden="true"></div>
   <div
-    class="pointer-events-none absolute -top-24 -right-24 -z-10 size-72 rounded-full bg-accent/20 blur-3xl"
+    class="absolute inset-0 -z-10 bg-gradient-to-b from-black/70 via-black/35 to-black/70"
     aria-hidden="true"
   ></div>
+  <!-- Smooth fade into the next section -->
   <div
-    class="pointer-events-none absolute bottom-0 left-0 -z-10 size-64 rounded-full bg-amber-soft/60 blur-3xl"
+    class="absolute inset-x-0 bottom-0 -z-10 h-32 bg-gradient-to-b from-transparent to-paper"
     aria-hidden="true"
   ></div>
 
-  <div class="mx-auto max-w-[1280px] px-4 pb-24 pt-12 sm:px-6 sm:pt-20 sm:pb-32">
+  <div class="mx-auto flex max-w-[1280px] flex-col justify-center px-4 pb-16 pt-14 sm:px-6 sm:pb-24 sm:pt-24">
     <div class="mx-auto max-w-3xl text-center" data-reveal>
-      <span class="badge bg-white/20 text-white backdrop-blur">Manajemen kost</span>
-      <h1 class="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-white drop-shadow-sm sm:text-6xl">
+      <span class="badge bg-white/15 text-white ring-1 ring-white/30 backdrop-blur-sm">
+        Manajemen kost
+      </span>
+      <h1
+        class="mt-5 text-4xl font-bold leading-[1.05] tracking-tight text-white [text-shadow:0_2px_28px_rgb(0_0_0/0.55)] sm:text-6xl"
+      >
         Urus kost dengan tenang,<br class="hidden sm:block" />
         <span class="text-amber-soft">dari kamar sampai pembayaran.</span>
       </h1>
@@ -67,9 +74,14 @@
       </p>
       <div class="mt-8 flex flex-wrap items-center justify-center gap-3">
         <a href="/login" class="btn-primary px-6">Masuk ke akun</a>
-        <a href="#fitur" class="btn-secondary px-6">Lihat fitur</a>
+        <a
+          href="#fitur"
+          class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl border border-white/40 bg-white/10 px-6 text-sm font-semibold text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+        >
+          Lihat fitur
+        </a>
       </div>
-      <p class="mt-4 text-xs text-white/70">Akun staf dibuat oleh owner melalui halaman Pengaturan.</p>
+      <p class="mt-4 text-xs text-white/75">Akun staf dibuat oleh owner melalui halaman Pengaturan.</p>
     </div>
 
     <!-- Floating mockup card overlapping into next section -->
@@ -84,7 +96,7 @@
           </div>
           <span class="badge-green">Live</span>
         </div>
-        <div class="mt-4 grid gap-3 sm:grid-cols-3">
+        <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
           <div class="rounded-xl border border-line bg-paper/60 p-3">
             <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Kamar terisi</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">87%</p>
@@ -97,7 +109,7 @@
             <p class="mt-0.5 text-xl font-bold tabular-nums">Rp 12,4 jt</p>
             <p class="mt-1 text-[11px] text-muted">14 tagihan aktif</p>
           </div>
-          <div class="rounded-xl border border-line bg-paper/60 p-3">
+          <div class="hidden rounded-xl border border-line bg-paper/60 p-3 sm:block">
             <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Pembayaran</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">Rp 9,8 jt</p>
             <p class="mt-1 text-[11px] text-muted">3 belum lunas</p>
@@ -249,20 +261,29 @@
   </footer>
 
   <style>
-    [data-reveal] {
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
+    /*
+     * Content is visible by default. The reveal is an animation that only
+     * starts once JS adds `.is-visible`, so a failed/blocked script can never
+     * leave the page blank. `:global()` keeps Svelte from pruning the rule.
+     */
+    :global([data-reveal].is-visible) {
+      animation: reveal-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    [data-reveal].is-visible {
-      opacity: 1;
-      transform: none;
-    }
-    @media (prefers-reduced-motion: reduce) {
-      [data-reveal] {
+
+    @keyframes reveal-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
         opacity: 1;
         transform: none;
-        transition: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      :global([data-reveal].is-visible) {
+        animation: none;
       }
     }
   </style>
