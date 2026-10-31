@@ -13,6 +13,10 @@
   --color-amber-soft: #fbeed7;
   --color-danger: #b42318;
   --color-danger-soft: #fde9e7;
+  --color-ok: #34d399;
+  /* Focus ring colour. Scopes that sit on a dark or accent surface
+     override this to #fff so the ring keeps 3:1 against what it crosses. */
+  --color-focus: #0c6b5c;
   --color-blue-soft: #e7eef9;
   --color-blue: #245a9a;
   --font-sans:
@@ -50,7 +54,7 @@
     outline: none;
   }
   :focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-focus);
     outline-offset: 2px;
   }
   @media (prefers-reduced-motion: reduce) {

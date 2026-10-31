@@ -6,10 +6,8 @@
     FileText,
     Mail,
     Menu,
-    Quote,
     ReceiptText,
     ShieldCheck,
-    Star,
     Users,
     Wallet,
     X,
@@ -17,6 +15,7 @@
 
   let scrolled = $state(false);
   let menuOpen = $state(false);
+  let status = $state<'checking' | 'ok' | 'down'>('checking');
 
   // The navbar is transparent over the hero photo and turns solid once the
   // page scrolls (or while the mobile menu is open).
@@ -32,30 +31,6 @@
     'block rounded-xl px-3 py-3 text-sm font-semibold transition-colors ' +
       (solidNav ? 'text-ink hover:bg-black/5' : 'text-white hover:bg-white/10'),
   );
-
-  const testimonials = [
-    {
-      quote:
-        'Dulu saya catat tagihan di buku dan sering ada yang terlewat. Sekarang semua kamar, kontrak, dan status bayar kelihatan dalam satu layar.',
-      name: 'Rani Kusuma',
-      role: 'Owner · Kost Melati, Bandung',
-      initials: 'RK',
-    },
-    {
-      quote:
-        'Yang paling membantu itu rekap kas bulanan. Saya tidak perlu lagi menghitung ulang pemasukan dan pengeluaran secara manual.',
-      name: 'Adi Nugroho',
-      role: 'Owner · Griya Cempaka, Yogyakarta',
-      initials: 'AN',
-    },
-    {
-      quote:
-        'Staf saya cukup buka dari HP untuk mencatat pembayaran. Riwayatnya rapi dan saya tetap bisa mengawasi lewat laporan.',
-      name: 'Siti Rahmawati',
-      role: 'Pengelola · Kost Sejahtera, Surabaya',
-      initials: 'SR',
-    },
-  ];
 
   const faqs = [
     {
@@ -87,6 +62,9 @@
   // Subtle fade-in on scroll. Content is fully visible by default; the
   // animation is a pure enhancement, so the page never depends on JS.
   onMount(() => {
+    // The landing canvas is white, while the app shell keeps its cream tone.
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#ffffff');
+
     const onScroll = () => {
       scrolled = window.scrollY > 12;
     };
@@ -112,6 +90,15 @@
       targets.forEach((t) => io?.observe(t));
     }
 
+    fetch('/api/health', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error('unhealthy'))))
+      .then((d) => {
+        status = d?.status === 'ok' ? 'ok' : 'down';
+      })
+      .catch(() => {
+        status = 'down';
+      });
+
     return () => {
       window.removeEventListener('scroll', onScroll);
       io?.disconnect();
@@ -121,7 +108,13 @@
   function closeMenu() {
     menuOpen = false;
   }
+
+  function onKeydown(e: KeyboardEvent) {
+    if (e.key === 'Escape') menuOpen = false;
+  }
 </script>
+
+<svelte:window onkeydown={onKeydown} />
 
 <svelte:head>
   <title>Panggora — Manajemen kost yang tenang</title>
@@ -129,15 +122,22 @@
     name="description"
     content="Panggora membantu owner kost mengelola kamar, penghuni, tagihan, pembayaran, deposit, pengeluaran, dan laporan kas dari satu tempat."
   />
-  <link rel="preload" as="image" href="/hero.jpg" fetchpriority="high" />
+  <link rel="preload" as="image" href="/hero.webp" fetchpriority="high" />
 </svelte:head>
+
+<a
+  href="#konten"
+  class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-xl focus:bg-white focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:text-ink focus:shadow-lg"
+>
+  Lewati ke konten
+</a>
 
 <!-- Navbar -->
 <header
   id="top"
   class="fixed inset-x-0 top-0 z-50 transition-colors duration-300 {solidNav
-    ? 'border-b border-line bg-white/90 text-ink backdrop-blur-md'
-    : 'bg-gradient-to-b from-black/60 via-black/25 to-transparent text-white'}"
+    ? 'border-b border-line bg-white/90 text-ink backdrop-blur-md [--color-focus:var(--color-accent)]'
+    : 'bg-gradient-to-b from-black/60 via-black/25 to-transparent text-white [--color-focus:#fff]'}"
 >
   <nav
     class="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-4 sm:px-6"
@@ -156,9 +156,9 @@
     <div class="hidden items-center gap-1 md:flex">
       <a href="#fitur" class={navLinkClass}>Fitur</a>
       <a href="#cara-kerja" class={navLinkClass}>Cara kerja</a>
-      <a href="#testimoni" class={navLinkClass}>Testimoni</a>
+      <a href="#manfaat" class={navLinkClass}>Manfaat</a>
       <a href="#faq" class={navLinkClass}>FAQ</a>
-      <a href="/login" class="btn-primary ml-2 px-5">Masuk</a>
+      <a href="/login" class="btn-primary ml-2 px-5">Masuk ke akun</a>
     </div>
 
     <button
@@ -180,7 +180,7 @@
       <div class="flex flex-col gap-1">
         <a href="#fitur" class={mobileLinkClass} onclick={closeMenu}>Fitur</a>
         <a href="#cara-kerja" class={mobileLinkClass} onclick={closeMenu}>Cara kerja</a>
-        <a href="#testimoni" class={mobileLinkClass} onclick={closeMenu}>Testimoni</a>
+        <a href="#manfaat" class={mobileLinkClass} onclick={closeMenu}>Manfaat</a>
         <a href="#faq" class={mobileLinkClass} onclick={closeMenu}>FAQ</a>
         <a href="/login" class="btn-primary mt-2">Masuk ke akun</a>
       </div>
@@ -188,10 +188,13 @@
   {/if}
 </header>
 
+<main id="konten">
 <!-- Hero: full-bleed image -->
-<section class="relative isolate overflow-hidden bg-ink">
+<section class="relative isolate overflow-hidden bg-ink [--color-focus:#fff]">
   <img
-    src="/hero.jpg"
+    src="/hero.webp"
+    width="1920"
+    height="1080"
     alt=""
     aria-hidden="true"
     class="absolute inset-0 -z-20 h-full w-full object-cover object-center"
@@ -214,7 +217,7 @@
   <div class="mx-auto flex max-w-[1280px] flex-col justify-center px-4 pb-16 pt-28 sm:px-6 sm:pb-24 sm:pt-32">
     <div class="mx-auto max-w-3xl text-center" data-reveal>
       <h1
-        class="text-4xl font-bold leading-[1.05] tracking-tight text-white [text-shadow:0_2px_28px_rgb(0_0_0/0.55)] sm:text-6xl"
+        class="text-4xl font-bold leading-[1.05] tracking-tight text-balance text-white [text-shadow:0_2px_28px_rgb(0_0_0/0.55)] sm:text-6xl"
       >
         Urus kost dengan tenang,<br class="hidden sm:block" />
         <span class="text-amber-soft">dari kamar sampai pembayaran.</span>
@@ -237,7 +240,7 @@
     <!-- Floating mockup card overlapping into next section -->
     <div class="relative mx-auto mt-10 max-w-4xl" data-reveal>
       <div
-        class="app-card mx-auto overflow-hidden p-4 sm:p-6 shadow-[0_24px_60px_-24px_rgb(24_35_31/0.35)]"
+        class="app-card mx-auto overflow-hidden rounded-[1.75rem] p-4 shadow-[0_24px_60px_-24px_rgb(24_35_31/0.35)] sm:p-6"
       >
         <div class="flex items-center justify-between border-b border-line pb-3">
           <div class="flex items-center gap-2">
@@ -248,19 +251,19 @@
         </div>
         <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
           <div class="rounded-xl border border-line bg-neutral-50 p-3">
-            <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Kamar terisi</p>
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Kamar terisi</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">87%</p>
             <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
               <div class="h-full rounded-full bg-accent" style="width: 87%"></div>
             </div>
           </div>
           <div class="rounded-xl border border-line bg-neutral-50 p-3">
-            <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Tagihan bulan ini</p>
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Tagihan</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums">Rp 12,4 jt</p>
             <p class="mt-1 text-[11px] text-muted">14 tagihan aktif</p>
           </div>
           <div class="hidden rounded-xl border border-line bg-neutral-50 p-3 sm:block">
-            <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">Pembayaran</p>
+            <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Pembayaran</p>
             <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">Rp 9,8 jt</p>
             <p class="mt-1 text-[11px] text-muted">3 belum lunas</p>
           </div>
@@ -308,7 +311,7 @@
   <section id="fitur" class="mx-auto max-w-[1280px] scroll-mt-20 px-4 py-12 sm:px-6">
     <div class="max-w-2xl" data-reveal>
       <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Fitur</p>
-      <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Semua yang Anda butuhkan untuk mengelola kost.</h2>
+      <h2 class="mt-2 text-2xl font-bold text-balance sm:text-3xl">Semua yang Anda butuhkan untuk mengelola kost.</h2>
       <p class="mt-2 text-sm text-muted">
         Dirancang untuk owner dan staf, mobile-first, dan mudah dipakai sehari-hari.
       </p>
@@ -364,7 +367,7 @@
   <section id="cara-kerja" class="mx-auto max-w-[1280px] scroll-mt-20 px-4 py-12 sm:px-6">
     <div class="max-w-2xl" data-reveal>
       <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Cara kerja</p>
-      <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Mulai dalam tiga langkah.</h2>
+      <h2 class="mt-2 text-2xl font-bold text-balance sm:text-3xl">Mulai dalam tiga langkah.</h2>
     </div>
     <div class="relative mt-10 grid gap-6 sm:grid-cols-3" data-reveal>
       <div class="hidden sm:block absolute top-6 left-[16%] right-[16%] h-px bg-gradient-to-r from-accent/20 via-accent to-accent/20" aria-hidden="true"></div>
@@ -386,40 +389,56 @@
     </div>
   </section>
 
-  <!-- Testimoni -->
-  <section id="testimoni" class="scroll-mt-20 border-y border-line bg-white py-14 sm:py-20">
+  <!-- Manfaat -->
+  <section id="manfaat" class="scroll-mt-20 border-y border-line bg-white py-14 sm:py-20">
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6">
       <div class="max-w-2xl" data-reveal>
-        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Testimoni</p>
-        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Dipakai sehari-hari oleh pengelola kost.</h2>
+        <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">Manfaat</p>
+        <h2 class="mt-2 text-2xl font-bold text-balance sm:text-3xl">
+          Yang berubah setelah pindah ke Panggora.
+        </h2>
         <p class="mt-2 text-sm text-muted">
-          Cerita singkat dari owner dan staf yang memindahkan pencatatan manual ke Panggora.
+          Tiga pekerjaan yang paling sering menyita waktu saat pencatatan masih manual.
         </p>
       </div>
 
       <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" data-reveal>
-        {#each testimonials as t}
-          <figure class="app-card flex h-full flex-col p-6">
-            <Quote size={26} class="text-accent/30" aria-hidden="true" />
-            <blockquote class="mt-4 flex-1 text-sm leading-7 text-ink">“{t.quote}”</blockquote>
-            <div class="mt-5 flex items-center gap-1 text-amber" role="img" aria-label="5 dari 5 bintang">
-              {#each Array(5) as _}
-                <Star size={14} class="fill-current" aria-hidden="true" />
-              {/each}
-            </div>
-            <figcaption class="mt-4 flex items-center gap-3 border-t border-line pt-4">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-full bg-accent-soft text-xs font-bold text-accent-dark"
-              >
-                {t.initials}
-              </span>
-              <span class="min-w-0">
-                <span class="block text-sm font-bold text-ink">{t.name}</span>
-                <span class="block text-xs text-muted">{t.role}</span>
-              </span>
-            </figcaption>
-          </figure>
-        {/each}
+        <div class="app-card p-6">
+          <span
+            class="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-accent-soft to-accent/20 text-accent"
+          >
+            <ReceiptText size={20} aria-hidden="true" />
+          </span>
+          <h3 class="mt-4 text-base font-bold">Tagihan tidak lagi terlewat</h3>
+          <p class="mt-1 text-sm leading-6 text-muted">
+            Status lunas dan belum lunas terlihat per kamar, jadi tidak perlu mengecek buku catatan
+            satu per satu.
+          </p>
+        </div>
+        <div class="app-card p-6">
+          <span
+            class="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-accent-soft to-accent/20 text-accent"
+          >
+            <Wallet size={20} aria-hidden="true" />
+          </span>
+          <h3 class="mt-4 text-base font-bold">Rekap kas tanpa hitung ulang</h3>
+          <p class="mt-1 text-sm leading-6 text-muted">
+            Pemasukan dan pengeluaran bulan berjalan tersaji langsung untuk laporan, tanpa rekap
+            manual di akhir bulan.
+          </p>
+        </div>
+        <div class="app-card p-6">
+          <span
+            class="flex size-11 items-center justify-center rounded-xl bg-gradient-to-br from-accent-soft to-accent/20 text-accent"
+          >
+            <ShieldCheck size={20} aria-hidden="true" />
+          </span>
+          <h3 class="mt-4 text-base font-bold">Staf tetap terkontrol</h3>
+          <p class="mt-1 text-sm leading-6 text-muted">
+            Pembayaran yang dicatat staf langsung terlihat di laporan owner, lengkap dengan jejak
+            audit.
+          </p>
+        </div>
       </div>
     </div>
   </section>
@@ -429,7 +448,7 @@
     <div class="mx-auto max-w-[1280px] px-4 sm:px-6">
       <div class="max-w-2xl" data-reveal>
         <p class="text-[11px] font-bold uppercase tracking-[0.16em] text-accent">FAQ</p>
-        <h2 class="mt-2 text-2xl font-bold sm:text-3xl">Pertanyaan yang sering diajukan.</h2>
+        <h2 class="mt-2 text-2xl font-bold text-balance sm:text-3xl">Pertanyaan yang sering diajukan.</h2>
         <p class="mt-2 text-sm text-muted">
           Belum ketemu jawabannya? Kirim email ke
           <a href="mailto:halo@panggora.my.id" class="font-semibold text-accent hover:underline">
@@ -462,29 +481,31 @@
 
   <!-- CTA -->
   <section class="mx-auto max-w-[1280px] px-4 py-12 sm:px-6">
-    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-accent-dark p-6 text-white shadow-[var(--shadow-card)] sm:p-10" data-reveal>
+    <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-accent to-accent-dark p-6 text-white shadow-[var(--shadow-card)] [--color-focus:#fff] sm:p-10" data-reveal>
       <div class="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full bg-white/10 blur-3xl" aria-hidden="true"></div>
       <div class="pointer-events-none absolute -bottom-20 -left-10 size-72 rounded-full bg-amber-soft/20 blur-3xl" aria-hidden="true"></div>
       <div class="relative flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 class="text-xl font-bold sm:text-2xl">Siap mengelola kost dengan lebih tenang?</h2>
+          <h2 class="text-xl font-bold text-balance sm:text-2xl">Siap mengelola kost dengan lebih tenang?</h2>
           <p class="mt-1 text-sm text-white/80">Masuk ke akun Anda dan mulai hari ini.</p>
         </div>
         <a href="/login" class="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white px-6 text-sm font-semibold text-accent transition-colors hover:bg-neutral-100">
-          Masuk
+          Masuk ke akun
         </a>
       </div>
     </div>
   </section>
+</main>
 
   <!-- Footer -->
-  <footer class="border-t border-white/10 bg-ink text-white/70">
+  <footer class="border-t border-white/10 bg-ink text-white/70 [--color-focus:#fff]">
     <div class="mx-auto max-w-[1280px] px-4 py-12 sm:px-6 sm:py-16">
       <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div class="max-w-sm lg:col-span-2">
           <a href="#top" class="inline-flex items-center gap-2 rounded-lg text-white">
             <span
               class="flex size-9 items-center justify-center rounded-xl bg-accent text-sm font-black text-white"
+              aria-hidden="true"
             >
               P
             </span>
@@ -502,9 +523,9 @@
           <ul class="mt-4 space-y-3 text-sm">
             <li><a href="#fitur" class="transition-colors hover:text-white">Fitur</a></li>
             <li><a href="#cara-kerja" class="transition-colors hover:text-white">Cara kerja</a></li>
-            <li><a href="#testimoni" class="transition-colors hover:text-white">Testimoni</a></li>
+            <li><a href="#manfaat" class="transition-colors hover:text-white">Manfaat</a></li>
             <li><a href="#faq" class="transition-colors hover:text-white">FAQ</a></li>
-            <li><a href="/login" class="transition-colors hover:text-white">Masuk</a></li>
+            <li><a href="/login" class="transition-colors hover:text-white">Masuk ke akun</a></li>
           </ul>
         </nav>
 
@@ -521,13 +542,23 @@
               </a>
             </li>
             <li>
-              <a
-                href="/api/health"
-                class="inline-flex items-center gap-2 transition-colors hover:text-white"
-              >
-                <span class="size-2 rounded-full bg-emerald-400" aria-hidden="true"></span>
-                Status layanan
-              </a>
+              <p class="inline-flex items-center gap-2" role="status">
+                <span
+                  class="size-2 rounded-full {status === 'ok'
+                    ? 'bg-ok'
+                    : status === 'down'
+                      ? 'bg-danger'
+                      : 'bg-white/40'}"
+                  aria-hidden="true"
+                ></span>
+                <span>
+                  {status === 'ok'
+                    ? 'Semua sistem normal'
+                    : status === 'down'
+                      ? 'Layanan tidak tersedia'
+                      : 'Memeriksa status…'}
+                </span>
+              </p>
             </li>
           </ul>
         </div>
