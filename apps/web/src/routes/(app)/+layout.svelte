@@ -6,6 +6,7 @@
   import { toasts } from '#lib/toast.svelte.js';
   import Modal from '#lib/components/Modal.svelte';
   import NotificationBell from '#lib/components/NotificationBell.svelte';
+  import Logo from '#lib/components/Logo.svelte';
   import {
     BarChart3,
     Bell,
@@ -80,10 +81,7 @@
   >
     <div class="flex items-center justify-between px-5 pb-4 pt-6">
       <a href="/dashboard" class="flex items-center gap-3">
-        <span
-          class="flex size-10 items-center justify-center rounded-xl bg-accent text-lg font-black text-white"
-          >P</span
-        >
+        <Logo size={40} />
         <span>
           <span class="block text-[15px] font-bold leading-tight">Panggora</span>
           <span class="block text-[11px] text-muted">{data.me.organization.name}</span>
@@ -146,10 +144,7 @@
       class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-line bg-paper/90 px-4 backdrop-blur-md lg:hidden print:hidden"
     >
       <a href="/dashboard" class="flex items-center gap-2">
-        <span
-          class="flex size-8 items-center justify-center rounded-lg bg-accent text-sm font-black text-white"
-          >P</span
-        >
+        <Logo size={32} />
         <span class="text-sm font-bold">Panggora</span>
       </a>
       <div class="flex items-center gap-1 -mr-2">

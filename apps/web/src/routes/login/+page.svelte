@@ -1,6 +1,7 @@
 <script lang="ts">
   import { api, ApiError } from '#lib/api.js';
   import { Eye, EyeOff, LoaderCircle, LogIn } from 'lucide-svelte';
+  import Logo from '#lib/components/Logo.svelte';
   import type { PageData } from './$types';
 
   let { data }: { data: PageData } = $props();
@@ -40,10 +41,7 @@
       class="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_20%_20%,#f5e6b8_0,transparent_35%),radial-gradient(circle_at_80%_70%,#57b89f_0,transparent_40%)]"
     ></div>
     <div class="relative">
-      <span
-        class="flex size-12 items-center justify-center rounded-2xl bg-white/10 text-xl font-black backdrop-blur"
-        >P</span
-      >
+      <Logo size={48} />
       <p class="mt-5 text-xs font-bold uppercase tracking-[0.2em] text-white/60">Panggora</p>
       <h1 class="mt-3 max-w-lg text-4xl font-bold leading-[1.1]">
         Urus kost dengan tenang, dari kamar sampai pembayaran.
@@ -67,10 +65,7 @@
   <section class="flex items-center justify-center px-5 py-10 sm:px-10">
     <div class="w-full max-w-md">
       <div class="mb-8 flex items-center gap-3 lg:hidden">
-        <span
-          class="flex size-10 items-center justify-center rounded-xl bg-accent text-lg font-black text-white"
-          >P</span
-        >
+        <Logo size={40} />
         <div>
           <p class="font-bold leading-tight">Panggora</p>
           <p class="text-xs text-muted">Manajemen kost</p>

@@ -1,6 +1,6 @@
 // Bump this version to invalidate every previously cached asset.
-const CACHE = 'panggora-shell-v2';
-const SHELL = ['/icon.svg', '/manifest.webmanifest'];
+const CACHE = 'panggora-shell-v3';
+const SHELL = ['/icon-192.png', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

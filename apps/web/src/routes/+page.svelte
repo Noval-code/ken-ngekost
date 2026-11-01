@@ -12,6 +12,7 @@
     Wallet,
     X,
   } from 'lucide-svelte';
+  import Logo from '#lib/components/Logo.svelte';
 
   let scrolled = $state(false);
   let menuOpen = $state(false);
@@ -144,12 +145,7 @@
     aria-label="Navigasi utama"
   >
     <a href="#top" class="flex items-center gap-2 rounded-lg">
-      <span
-        class="flex size-9 items-center justify-center rounded-xl bg-accent text-sm font-black text-white shadow-sm"
-        aria-hidden="true"
-      >
-        P
-      </span>
+      <Logo size={36} />
       <span class="text-lg font-bold tracking-tight">Panggora</span>
     </a>
 
@@ -244,7 +240,7 @@
       >
         <div class="flex items-center justify-between border-b border-line pb-3">
           <div class="flex items-center gap-2">
-            <span class="flex size-8 items-center justify-center rounded-lg bg-accent text-xs font-black text-white">P</span>
+            <Logo size={32} />
             <span class="text-sm font-bold">Dashboard Panggora</span>
           </div>
           <span class="badge-green">Live</span>
@@ -503,12 +499,7 @@
       <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
         <div class="max-w-sm lg:col-span-2">
           <a href="#top" class="inline-flex items-center gap-2 rounded-lg text-white">
-            <span
-              class="flex size-9 items-center justify-center rounded-xl bg-accent text-sm font-black text-white"
-              aria-hidden="true"
-            >
-              P
-            </span>
+            <Logo size={36} />
             <span class="text-lg font-bold tracking-tight">Panggora</span>
           </a>
           <p class="mt-4 text-sm leading-6">
