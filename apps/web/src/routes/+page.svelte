@@ -1,18 +1,29 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import {
+    ArrowDownRight,
+    BarChart3,
+    Building2,
+    CalendarDays,
     ChevronDown,
+    CircleDollarSign,
     DoorOpen,
     FileText,
+    Landmark,
+    LayoutDashboard,
     Mail,
     Menu,
+    Plus,
     ReceiptText,
+    Settings,
     ShieldCheck,
     Users,
     Wallet,
     X,
   } from 'lucide-svelte';
   import Logo from '#lib/components/Logo.svelte';
+  import StatCard from '#lib/components/StatCard.svelte';
+  import { formatIdr } from '#lib/format.js';
 
   let scrolled = $state(false);
   let menuOpen = $state(false);
@@ -33,6 +44,19 @@
     'block rounded-xl px-3 py-3 text-sm font-semibold transition-colors ' +
       (solidNav ? 'text-ink hover:bg-black/5' : 'text-white hover:bg-white/10'),
   );
+
+  // Sidebar inside the landing preview, mirroring the real app shell.
+  const previewNav = [
+    { label: 'Beranda', icon: LayoutDashboard, active: true },
+    { label: 'Kamar', icon: DoorOpen, active: false },
+    { label: 'Tagihan', icon: ReceiptText, active: false },
+    { label: 'Pembayaran', icon: Wallet, active: false },
+    { label: 'Properti', icon: Building2, active: false },
+    { label: 'Penghuni', icon: Users, active: false },
+    { label: 'Deposit', icon: Landmark, active: false },
+    { label: 'Laporan', icon: BarChart3, active: false },
+    { label: 'Pengaturan', icon: Settings, active: false },
+  ];
 
   const faqs = [
     {
@@ -107,12 +131,15 @@
 
       // 0 = card entering from the bottom, 1 = card leaving past the top.
       const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
-      // Halve the angle on phones so the mockup text stays easy to read.
-      const factor = window.matchMedia('(max-width: 639px)').matches ? 0.5 : 1;
+      // Soften the effect on phones so the preview text stays easy to read.
+      const factor = window.matchMedia('(max-width: 639px)').matches ? 0.7 : 1;
+      // 1 at the middle of the viewport, 0 at either edge.
+      const proximity = 1 - Math.abs(2 * progress - 1);
 
-      mockupTilt.style.setProperty('--tilt-x', `${(10 - 20 * progress) * factor}deg`);
-      mockupTilt.style.setProperty('--tilt-y', `${(-8 + 16 * progress) * factor}deg`);
-      mockupTilt.style.setProperty('--tilt-shift', `${(18 - 36 * progress) * factor}px`);
+      mockupTilt.style.setProperty('--tilt-x', `${(16 - 32 * progress) * factor}deg`);
+      mockupTilt.style.setProperty('--tilt-y', `${(-12 + 24 * progress) * factor}deg`);
+      mockupTilt.style.setProperty('--tilt-shift', `${(30 - 60 * progress) * factor}px`);
+      mockupTilt.style.setProperty('--tilt-scale', `${0.96 + 0.04 * proximity}`);
     };
 
     const queueTilt = () => {
@@ -270,48 +297,307 @@
       </div>
     </div>
 
-    <!-- Floating mockup card overlapping into next section -->
-    <div class="relative mx-auto mt-10 max-w-4xl mockup-tilt" data-reveal>
+    <!-- Desktop app preview: mirrors the real dashboard shell and components -->
+    <div class="relative mx-auto mt-10 w-full max-w-6xl mockup-tilt" data-reveal>
       <div
-        class="app-card mockup-tilt-card mx-auto overflow-hidden rounded-[1.75rem] p-4 shadow-[0_24px_60px_-24px_rgb(24_35_31/0.35)] sm:p-6"
+        class="app-card mockup-tilt-card overflow-hidden rounded-2xl shadow-[0_24px_60px_-24px_rgb(24_35_31/0.35)]"
         bind:this={mockupTilt}
       >
-        <div class="flex items-center justify-between border-b border-line pb-3">
-          <div class="flex items-center gap-2">
-            <Logo size={32} />
-            <span class="text-sm font-bold">Dashboard Panggora</span>
-          </div>
-          <span class="badge-green">Live</span>
-        </div>
-        <div class="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <div class="rounded-xl border border-line bg-neutral-50 p-3">
-            <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Kamar terisi</p>
-            <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">87%</p>
-            <div class="mt-2 h-1.5 overflow-hidden rounded-full bg-line">
-              <div class="h-full rounded-full bg-accent" style="width: 87%"></div>
+        <div class="flex">
+          <!-- Sidebar: makes the preview read as the desktop app, hidden on phones -->
+          <aside
+            class="hidden w-52 shrink-0 flex-col border-r border-line bg-surface/70 lg:flex"
+            aria-hidden="true"
+          >
+            <div class="flex items-center gap-2.5 px-4 py-4">
+              <Logo size={34} />
+              <span class="min-w-0">
+                <span class="block truncate text-[13px] font-bold leading-tight">Panggora</span>
+                <span class="block truncate text-[10px] text-muted">Kost Melati</span>
+              </span>
             </div>
-          </div>
-          <div class="rounded-xl border border-line bg-neutral-50 p-3">
-            <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Tagihan</p>
-            <p class="mt-0.5 text-xl font-bold tabular-nums">Rp 12,4 jt</p>
-            <p class="mt-1 text-[11px] text-muted">14 tagihan aktif</p>
-          </div>
-          <div class="hidden rounded-xl border border-line bg-neutral-50 p-3 sm:block">
-            <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Pembayaran</p>
-            <p class="mt-0.5 text-xl font-bold tabular-nums text-accent">Rp 9,8 jt</p>
-            <p class="mt-1 text-[11px] text-muted">3 belum lunas</p>
-          </div>
+
+            <div
+              class="mx-3 mb-3 flex items-center gap-2.5 rounded-lg border border-line bg-paper/70 p-2"
+            >
+              <span
+                class="flex size-7 shrink-0 items-center justify-center rounded-md bg-white text-[10px] font-bold text-accent shadow-sm"
+              >
+                KM
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block truncate text-[11px] font-semibold">Kost Melati</span>
+                <span class="block text-[10px] text-muted">Owner</span>
+              </span>
+            </div>
+
+            <nav class="flex-1 space-y-0.5 px-2">
+              {#each previewNav as item (item.label)}
+                <span
+                  class="flex min-h-8 items-center gap-2.5 rounded-md px-2.5 text-xs font-medium {item.active
+                    ? 'bg-accent-soft text-accent-dark'
+                    : 'text-muted'}"
+                >
+                  <item.icon size={15} strokeWidth={item.active ? 2.3 : 1.9} />
+                  {item.label}
+                </span>
+              {/each}
+            </nav>
+
+            <div class="border-t border-line px-3 py-3">
+              <div class="flex items-center gap-2.5">
+                <span
+                  class="flex size-7 shrink-0 items-center justify-center rounded-full bg-accent-soft text-[10px] font-bold text-accent-dark"
+                >
+                  BS
+                </span>
+                <div class="min-w-0">
+                  <p class="truncate text-[11px] font-semibold">Budi Santoso</p>
+                  <p class="truncate text-[10px] text-muted">budi@kostmelati.id</p>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+          <div class="min-w-0 flex-1">
+            <!-- App top bar -->
+            <div class="flex items-center justify-between gap-3 border-b border-line bg-paper/50 px-4 py-3">
+              <div class="flex min-w-0 items-center gap-2.5">
+                <span class="lg:hidden"><Logo size={30} /></span>
+                <div class="min-w-0">
+                  <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">
+                    Ringkasan operasional
+                  </p>
+                  <p class="truncate text-base font-bold leading-tight sm:text-lg">Beranda</p>
+                </div>
+              </div>
+              <div class="flex shrink-0 items-center gap-2">
+                <span class="badge-gray">Pratinjau</span>
+                <span class="btn-secondary btn-sm hidden sm:inline-flex">
+                  <CalendarDays size={14} /> Laporan
+                </span>
+                <span class="btn-primary btn-sm hidden sm:inline-flex">
+                  <Plus size={14} /> Catat bayar
+                </span>
+              </div>
+            </div>
+
+            <div class="p-3.5 sm:p-4">
+              <!-- Same StatCard component as the real dashboard, filled with sample numbers -->
+              <div class="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+          <StatCard
+            compact
+            label="Tingkat hunian"
+            value="87%"
+            detail="14 terisi · 2 kosong"
+            tone="accent"
+          >
+            {#snippet icon()}<DoorOpen size={14} />{/snippet}
+          </StatCard>
+          <StatCard
+            compact
+            label="Kas diterima"
+            value={formatIdr(9800000)}
+            detail="Periode 1–31 Okt"
+            tone="accent"
+          >
+            {#snippet icon()}<Wallet size={14} />{/snippet}
+          </StatCard>
+          <StatCard
+            compact
+            label="Sisa tagihan"
+            value={formatIdr(12400000)}
+            detail="Seluruh invoice berjalan"
+            tone="amber"
+          >
+            {#snippet icon()}<ReceiptText size={14} />{/snippet}
+          </StatCard>
+          <StatCard
+            compact
+            label="Tunggakan"
+            value={formatIdr(1600000)}
+            detail="Lewat jatuh tempo"
+            tone="danger"
+          >
+            {#snippet icon()}<CircleDollarSign size={14} />{/snippet}
+          </StatCard>
         </div>
-        <div class="mt-4 grid gap-2 sm:grid-cols-2">
-          <div class="rounded-xl border border-line bg-surface p-3">
-            <p class="text-[11px] font-semibold text-muted">Kamar A-01 · Kost Melati</p>
-            <p class="mt-1 text-sm font-bold">Budi Santoso</p>
-            <p class="text-xs text-muted">Lunas · Rp 1.500.000</p>
-          </div>
-          <div class="rounded-xl border border-line bg-surface p-3">
-            <p class="text-[11px] font-semibold text-muted">Kamar B-03 · Kost Melati</p>
-            <p class="mt-1 text-sm font-bold">Siti Aminah</p>
-            <p class="text-xs text-amber">Belum lunas · Rp 1.600.000</p>
+
+              <div class="mt-2.5 grid gap-2.5 lg:grid-cols-[1.5fr_1fr]">
+                <!-- Arus kas periode -->
+                <section class="rounded-xl border border-line bg-surface p-3.5">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                        Arus kas periode
+                      </p>
+                      <p class="mt-0.5 text-[10px] text-muted">
+                        Uang diterima dibanding pengeluaran
+                      </p>
+                    </div>
+                    <span class="badge-green">79% tertagih</span>
+                  </div>
+
+                  <div class="mt-2.5 grid grid-cols-3 gap-2">
+                    <div class="rounded-lg bg-paper p-2">
+                      <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">
+                        Kas masuk
+                      </p>
+                      <p class="mt-0.5 text-xs font-bold tabular-nums text-accent sm:text-sm">
+                        {formatIdr(9800000)}
+                      </p>
+                    </div>
+                    <div class="rounded-lg bg-paper p-2">
+                      <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">
+                        Pengeluaran
+                      </p>
+                      <p class="mt-0.5 text-xs font-bold tabular-nums text-danger sm:text-sm">
+                        {formatIdr(2150000)}
+                      </p>
+                    </div>
+                    <div class="rounded-lg bg-accent-soft p-2">
+                      <p class="text-[10px] font-semibold uppercase tracking-wider text-accent-dark">
+                        Kas bersih
+                      </p>
+                      <p class="mt-0.5 text-xs font-bold tabular-nums text-accent-dark sm:text-sm">
+                        {formatIdr(7650000)}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div class="mt-2.5 grid gap-1 border-t border-line pt-2.5 sm:grid-cols-2 sm:gap-x-4">
+                    <div class="flex items-center justify-between gap-2 text-[11px]">
+                      <span class="text-muted">Invoice diterbitkan</span>
+                      <span class="font-semibold tabular-nums">{formatIdr(12400000)}</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 text-[11px]">
+                      <span class="text-muted">Piutang periode</span>
+                      <span class="font-semibold tabular-nums">{formatIdr(4900000)}</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 text-[11px]">
+                      <span class="text-muted">Deposit diterima</span>
+                      <span class="font-semibold tabular-nums">{formatIdr(1500000)}</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-2 text-[11px]">
+                      <span class="text-muted">Deposit direfund</span>
+                      <span class="font-semibold tabular-nums">{formatIdr(0)}</span>
+                    </div>
+                  </div>
+
+                  <!-- Ringkasan properti: fills the panel like the real dashboard -->
+                  <div class="mt-2.5 border-t border-line pt-2">
+                    <div class="flex items-center justify-between">
+                      <p class="text-[10px] font-semibold uppercase tracking-wider text-muted">
+                        Ringkasan properti
+                      </p>
+                      <span class="text-[10px] font-semibold text-accent">Kelola</span>
+                    </div>
+                    <ul class="mt-1.5 grid gap-1 sm:grid-cols-2">
+                      <li class="flex items-center justify-between gap-2 rounded-lg bg-paper px-2 py-1.5">
+                        <div class="min-w-0">
+                          <p class="truncate text-[11px] font-semibold">Kost Melati</p>
+                          <p class="text-[10px] text-muted">14/16 kamar terisi</p>
+                        </div>
+                        <span class="shrink-0 rounded-full bg-accent-soft px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                          87%
+                        </span>
+                      </li>
+                      <li class="flex items-center justify-between gap-2 rounded-lg bg-paper px-2 py-1.5">
+                        <div class="min-w-0">
+                          <p class="truncate text-[11px] font-semibold">Kost Anggrek</p>
+                          <p class="text-[10px] text-muted">8/10 kamar terisi</p>
+                        </div>
+                        <span class="shrink-0 rounded-full bg-accent-soft px-1.5 py-0.5 text-[10px] font-semibold text-accent">
+                          80%
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </section>
+
+                <div class="grid gap-2.5">
+                  <!-- Jatuh tempo -->
+                  <section class="overflow-hidden rounded-xl border border-line bg-surface">
+                    <div class="flex items-center justify-between border-b border-line px-3 py-2">
+                      <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                        Jatuh tempo
+                      </p>
+                      <span class="text-[10px] font-semibold text-accent">Lihat semua</span>
+                    </div>
+                    <ul class="divide-y divide-line">
+                      <li class="flex items-start justify-between gap-2 px-3 py-2">
+                        <div class="min-w-0">
+                          <p class="truncate text-xs font-semibold">Rian Hidayat</p>
+                          <p class="truncate text-[10px] text-muted">
+                            Kost Melati · A-04 · 8 Okt 2026
+                          </p>
+                        </div>
+                        <p class="shrink-0 text-xs font-bold tabular-nums text-danger">
+                          {formatIdr(1500000)}
+                        </p>
+                      </li>
+                      <li class="flex items-start justify-between gap-2 px-3 py-2">
+                        <div class="min-w-0">
+                          <p class="truncate text-xs font-semibold">Siti Aminah</p>
+                          <p class="truncate text-[10px] text-muted">
+                            Kost Melati · B-03 · 5 Okt 2026
+                          </p>
+                        </div>
+                        <p class="shrink-0 text-xs font-bold tabular-nums text-danger">
+                          {formatIdr(1600000)}
+                        </p>
+                      </li>
+                    </ul>
+                  </section>
+
+                  <!-- Pembayaran terbaru -->
+                  <section class="overflow-hidden rounded-xl border border-line bg-surface">
+                    <div class="flex items-center justify-between border-b border-line px-3 py-2">
+                      <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">
+                        Pembayaran terbaru
+                      </p>
+                      <span class="text-[10px] font-semibold text-accent">Lihat semua</span>
+                    </div>
+                    <ul class="divide-y divide-line">
+                      <li class="flex items-center justify-between gap-2 px-3 py-2">
+                        <div class="flex min-w-0 items-center gap-2">
+                          <span
+                            class="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"
+                          >
+                            <ArrowDownRight size={12} />
+                          </span>
+                          <div class="min-w-0">
+                            <p class="truncate text-xs font-semibold">Budi Santoso</p>
+                            <p class="truncate text-[10px] text-muted">
+                              12 Okt 2026 · Transfer bank
+                            </p>
+                          </div>
+                        </div>
+                        <span class="shrink-0 text-xs font-bold tabular-nums text-accent">
+                          +{formatIdr(1500000)}
+                        </span>
+                      </li>
+                      <li class="flex items-center justify-between gap-2 px-3 py-2">
+                        <div class="flex min-w-0 items-center gap-2">
+                          <span
+                            class="flex size-6 shrink-0 items-center justify-center rounded-full bg-accent-soft text-accent"
+                          >
+                            <ArrowDownRight size={12} />
+                          </span>
+                          <div class="min-w-0">
+                            <p class="truncate text-xs font-semibold">Siti Aminah</p>
+                            <p class="truncate text-[10px] text-muted">10 Okt 2026 · Tunai</p>
+                          </div>
+                        </div>
+                        <span class="shrink-0 text-xs font-bold tabular-nums text-accent">
+                          +{formatIdr(1600000)}
+                        </span>
+                      </li>
+                    </ul>
+                  </section>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -641,12 +927,12 @@
      * their identity values, so the card simply stays flat.
      */
     .mockup-tilt {
-      perspective: 1200px;
+      perspective: 900px;
     }
 
     .mockup-tilt-card {
       transform: translateY(var(--tilt-shift, 0px)) rotateX(var(--tilt-x, 0deg))
-        rotateY(var(--tilt-y, 0deg));
+        rotateY(var(--tilt-y, 0deg)) scale(var(--tilt-scale, 1));
       transform-origin: center;
       will-change: transform;
     }
