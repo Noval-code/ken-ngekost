@@ -17,6 +17,7 @@
   let scrolled = $state(false);
   let menuOpen = $state(false);
   let status = $state<'checking' | 'ok' | 'down'>('checking');
+  let mockupTilt: HTMLDivElement | undefined;
 
   // The navbar is transparent over the hero photo and turns solid once the
   // page scrolls (or while the mobile menu is open).
@@ -91,6 +92,39 @@
       targets.forEach((t) => io?.observe(t));
     }
 
+    // Scroll-linked 3D tilt for the dashboard mockup, mirroring the hero card
+    // on atlasindonesia.com: the card leans back as it enters, straightens in
+    // the middle of the viewport, then leans the other way as it leaves.
+    let tiltFrame = 0;
+
+    const updateTilt = () => {
+      tiltFrame = 0;
+      if (!mockupTilt) return;
+
+      const rect = mockupTilt.getBoundingClientRect();
+      const vh = window.innerHeight;
+      if (rect.bottom < 0 || rect.top > vh) return;
+
+      // 0 = card entering from the bottom, 1 = card leaving past the top.
+      const progress = Math.min(1, Math.max(0, (vh - rect.top) / (vh + rect.height)));
+      // Halve the angle on phones so the mockup text stays easy to read.
+      const factor = window.matchMedia('(max-width: 639px)').matches ? 0.5 : 1;
+
+      mockupTilt.style.setProperty('--tilt-x', `${(10 - 20 * progress) * factor}deg`);
+      mockupTilt.style.setProperty('--tilt-y', `${(-8 + 16 * progress) * factor}deg`);
+      mockupTilt.style.setProperty('--tilt-shift', `${(18 - 36 * progress) * factor}px`);
+    };
+
+    const queueTilt = () => {
+      if (!tiltFrame) tiltFrame = requestAnimationFrame(updateTilt);
+    };
+
+    if (!reduceMotion && mockupTilt) {
+      updateTilt();
+      window.addEventListener('scroll', queueTilt, { passive: true });
+      window.addEventListener('resize', queueTilt);
+    }
+
     fetch('/api/health', { cache: 'no-store' })
       .then((r) => (r.ok ? r.json() : Promise.reject(new Error('unhealthy'))))
       .then((d) => {
@@ -103,6 +137,9 @@
     return () => {
       window.removeEventListener('scroll', onScroll);
       io?.disconnect();
+      if (tiltFrame) cancelAnimationFrame(tiltFrame);
+      window.removeEventListener('scroll', queueTilt);
+      window.removeEventListener('resize', queueTilt);
     };
   });
 
@@ -234,9 +271,10 @@
     </div>
 
     <!-- Floating mockup card overlapping into next section -->
-    <div class="relative mx-auto mt-10 max-w-4xl" data-reveal>
+    <div class="relative mx-auto mt-10 max-w-4xl mockup-tilt" data-reveal>
       <div
-        class="app-card mx-auto overflow-hidden rounded-[1.75rem] p-4 shadow-[0_24px_60px_-24px_rgb(24_35_31/0.35)] sm:p-6"
+        class="app-card mockup-tilt-card mx-auto overflow-hidden rounded-[1.75rem] p-4 shadow-[0_24px_60px_-24px_rgb(24_35_31/0.35)] sm:p-6"
+        bind:this={mockupTilt}
       >
         <div class="flex items-center justify-between border-b border-line pb-3">
           <div class="flex items-center gap-2">
@@ -597,9 +635,30 @@
       }
     }
 
+    /*
+     * 3D scene for the dashboard mockup. The custom properties are driven
+     * from scroll progress in the script; without JS they all fall back to
+     * their identity values, so the card simply stays flat.
+     */
+    .mockup-tilt {
+      perspective: 1200px;
+    }
+
+    .mockup-tilt-card {
+      transform: translateY(var(--tilt-shift, 0px)) rotateX(var(--tilt-x, 0deg))
+        rotateY(var(--tilt-y, 0deg));
+      transform-origin: center;
+      will-change: transform;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       :global([data-reveal].is-visible) {
         animation: none;
+      }
+
+      .mockup-tilt-card {
+        transform: none;
+        will-change: auto;
       }
     }
   </style>
