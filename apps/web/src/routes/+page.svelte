@@ -58,6 +58,14 @@
     { label: 'Pengaturan', icon: Settings, active: false },
   ];
 
+  // Highlights shown in the landing marquee, mirroring the old stat cards.
+  const highlights = [
+    { value: '100%', text: 'Basis web, akses dari HP', accent: true },
+    { value: '6+', text: 'Modul terintegrasi', accent: false },
+    { value: '24/7', text: 'Akses kapan saja', accent: false },
+    { value: 'Aman', text: 'RBAC & audit log', accent: true },
+  ];
+
   const faqs = [
     {
       q: 'Apakah data kost saya aman?',
@@ -605,27 +613,37 @@
   </div>
 </section>
 
-<!-- Stats -->
-  <section class="mx-auto max-w-[1280px] px-4 py-10 sm:px-6">
-    <div class="grid gap-4 sm:grid-cols-4" data-reveal>
-      <div class="app-card p-5 text-center">
-        <p class="text-3xl font-bold tabular-nums text-accent">100%</p>
-        <p class="mt-1 text-xs text-muted">Basis web, akses dari HP</p>
-      </div>
-      <div class="app-card p-5 text-center">
-        <p class="text-3xl font-bold tabular-nums">6+</p>
-        <p class="mt-1 text-xs text-muted">Modul terintegrasi</p>
-      </div>
-      <div class="app-card p-5 text-center">
-        <p class="text-3xl font-bold tabular-nums">24/7</p>
-        <p class="mt-1 text-xs text-muted">Akses kapan saja</p>
-      </div>
-      <div class="app-card p-5 text-center">
-        <p class="text-3xl font-bold tabular-nums text-accent">Aman</p>
-        <p class="mt-1 text-xs text-muted">RBAC & audit log</p>
-      </div>
+<!-- Highlights: infinite marquee replacing the static stat cards -->
+{#snippet highlightCard(item: (typeof highlights)[number])}
+  <div class="app-card mx-2 flex w-64 shrink-0 items-center gap-4 px-5 py-4">
+    <p class="text-2xl font-bold tabular-nums {item.accent ? 'text-accent' : ''}">{item.value}</p>
+    <p class="text-xs leading-5 text-muted">{item.text}</p>
+  </div>
+{/snippet}
+
+<section class="marquee-section overflow-hidden py-8" aria-label="Ringkasan Panggora">
+  <div class="marquee relative" data-reveal>
+    <div
+      class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent sm:w-24"
+    ></div>
+    <div
+      class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent sm:w-24"
+    ></div>
+    <div class="marquee-track flex w-max">
+      <ul class="flex">
+        {#each highlights as item (item.value)}
+          <li>{@render highlightCard(item)}</li>
+        {/each}
+      </ul>
+      <!-- Second copy makes the loop seamless; hidden from assistive tech. -->
+      <ul class="flex" aria-hidden="true">
+        {#each highlights as item (item.value)}
+          <li>{@render highlightCard(item)}</li>
+        {/each}
+      </ul>
     </div>
-  </section>
+  </div>
+</section>
 
   <!-- Fitur bento -->
   <section id="fitur" class="mx-auto max-w-[1280px] scroll-mt-20 px-4 py-12 sm:px-6">
@@ -937,6 +955,29 @@
       will-change: transform;
     }
 
+    /*
+     * Highlight strip: the same four cards rendered twice inside one track.
+     * Shifting the track by exactly 50% lands on an identical frame, so the
+     * loop never jumps. Items use horizontal margins (not gap) because gap
+     * would leave the second copy half a gap short of a clean seam.
+     */
+    .marquee-track {
+      animation: marquee 38s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
     @media (prefers-reduced-motion: reduce) {
       :global([data-reveal].is-visible) {
         animation: none;
@@ -945,6 +986,24 @@
       .mockup-tilt-card {
         transform: none;
         will-change: auto;
+      }
+
+      /* No motion: drop the duplicate copy and let the strip wrap normally. */
+      .marquee-track {
+        animation: none;
+        width: auto;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-inline: 1rem;
+      }
+
+      .marquee-track > ul {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .marquee-track > ul[aria-hidden='true'] {
+        display: none;
       }
     }
   </style>
