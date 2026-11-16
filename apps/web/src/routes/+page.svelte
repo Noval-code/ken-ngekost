@@ -58,12 +58,12 @@
     { label: 'Pengaturan', icon: Settings, active: false },
   ];
 
-  // Highlights shown in the landing marquee, mirroring the old stat cards.
-  const highlights = [
-    { value: '100%', text: 'Basis web, akses dari HP', accent: true },
-    { value: '6+', text: 'Modul terintegrasi', accent: false },
-    { value: '24/7', text: 'Akses kapan saja', accent: false },
-    { value: 'Aman', text: 'RBAC & audit log', accent: true },
+  // Kost businesses shown in the landing marquee.
+  const partners = [
+    'Ken ngekost',
+    'Kost Putra Putri Arul Family',
+    "De'kost & homestay tegal",
+    'DIVA KOS',
   ];
 
   const faqs = [
@@ -613,15 +613,14 @@
   </div>
 </section>
 
-<!-- Highlights: infinite marquee replacing the static stat cards -->
-{#snippet highlightCard(item: (typeof highlights)[number])}
-  <div class="app-card mx-2 flex w-64 shrink-0 items-center gap-4 px-5 py-4">
-    <p class="text-2xl font-bold tabular-nums {item.accent ? 'text-accent' : ''}">{item.value}</p>
-    <p class="text-xs leading-5 text-muted">{item.text}</p>
+<!-- Client names: infinite marquee replacing the static stat cards -->
+{#snippet partnerCard(name: string)}
+  <div class="app-card mx-2 flex h-16 shrink-0 items-center justify-center px-6">
+    <p class="whitespace-nowrap text-sm font-bold tracking-tight text-ink/75">{name}</p>
   </div>
 {/snippet}
 
-<section class="marquee-section overflow-hidden py-8" aria-label="Ringkasan Panggora">
+<section class="marquee-section overflow-hidden py-8" aria-label="Pengelola kost yang memakai Panggora">
   <div class="marquee relative" data-reveal>
     <div
       class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent sm:w-24"
@@ -631,14 +630,14 @@
     ></div>
     <div class="marquee-track flex w-max">
       <ul class="flex">
-        {#each highlights as item (item.value)}
-          <li>{@render highlightCard(item)}</li>
+        {#each partners as name (name)}
+          <li>{@render partnerCard(name)}</li>
         {/each}
       </ul>
       <!-- Second copy makes the loop seamless; hidden from assistive tech. -->
       <ul class="flex" aria-hidden="true">
-        {#each highlights as item (item.value)}
-          <li>{@render highlightCard(item)}</li>
+        {#each partners as name (name)}
+          <li>{@render partnerCard(name)}</li>
         {/each}
       </ul>
     </div>
