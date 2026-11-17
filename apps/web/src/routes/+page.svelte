@@ -66,6 +66,12 @@
     'DIVA KOS',
   ];
 
+  // The strip repeats the names this many times. One copy is narrower than a
+  // desktop viewport, so a single shift must still leave enough content to
+  // fill the screen — otherwise the loop shows an empty tail before restarting.
+  const marqueeCopies = 8;
+  const marqueeRepeats = Array.from({ length: marqueeCopies }, (_, index) => index);
+
   const faqs = [
     {
       q: 'Apakah data kost saya aman?',
@@ -614,32 +620,45 @@
 </section>
 
 <!-- Client names: infinite marquee replacing the static stat cards -->
-{#snippet partnerCard(name: string)}
-  <div class="app-card mx-2 flex h-16 shrink-0 items-center justify-center px-6">
-    <p class="whitespace-nowrap text-sm font-bold tracking-tight text-ink/75">{name}</p>
-  </div>
-{/snippet}
+<section
+  class="marquee-section overflow-hidden py-8"
+  aria-label="Pengelola kost yang memakai Panggora"
+>
+  <!-- Readable once for assistive tech; the moving strip is decorative. -->
+  <ul class="sr-only">
+    {#each partners as name (name)}
+      <li>{name}</li>
+    {/each}
+  </ul>
 
-<section class="marquee-section overflow-hidden py-8" aria-label="Pengelola kost yang memakai Panggora">
-  <div class="marquee relative" data-reveal>
+  <p
+    class="mb-5 px-4 text-center text-[11px] font-semibold uppercase tracking-[0.2em] text-muted"
+    data-reveal
+  >
+    Dipercaya oleh
+  </p>
+
+  <div class="marquee relative" data-reveal aria-hidden="true">
     <div
       class="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-white to-transparent sm:w-24"
     ></div>
     <div
       class="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-white to-transparent sm:w-24"
     ></div>
-    <div class="marquee-track flex w-max">
-      <ul class="flex">
+    <div
+      class="marquee-track flex w-max"
+      style="--marquee-shift: {1 / marqueeCopies}"
+    >
+      <!-- Repeated enough times that one shift still covers an ultrawide screen. -->
+      {#each marqueeRepeats as copy (copy)}
         {#each partners as name (name)}
-          <li>{@render partnerCard(name)}</li>
+          <div class="app-card mx-2 flex h-16 shrink-0 items-center justify-center px-6">
+            <p class="whitespace-nowrap text-sm font-bold tracking-tight text-ink/75">
+              {name}
+            </p>
+          </div>
         {/each}
-      </ul>
-      <!-- Second copy makes the loop seamless; hidden from assistive tech. -->
-      <ul class="flex" aria-hidden="true">
-        {#each partners as name (name)}
-          <li>{@render partnerCard(name)}</li>
-        {/each}
-      </ul>
+      {/each}
     </div>
   </div>
 </section>
@@ -955,10 +974,10 @@
     }
 
     /*
-     * Highlight strip: the same four cards rendered twice inside one track.
-     * Shifting the track by exactly 50% lands on an identical frame, so the
-     * loop never jumps. Items use horizontal margins (not gap) because gap
-     * would leave the second copy half a gap short of a clean seam.
+     * Highlight strip: the client names are rendered several times inside one
+     * track. Each cycle shifts the track by exactly one copy (--marquee-shift),
+     * which lands on an identical frame, so the loop never jumps or shows a
+     * gap. Items use horizontal margins (not gap) so the seam spacing matches.
      */
     .marquee-track {
       animation: marquee 38s linear infinite;
@@ -973,7 +992,7 @@
         transform: translateX(0);
       }
       to {
-        transform: translateX(-50%);
+        transform: translateX(calc(-100% * var(--marquee-shift, 0.5)));
       }
     }
 
@@ -987,7 +1006,7 @@
         will-change: auto;
       }
 
-      /* No motion: drop the duplicate copy and let the strip wrap normally. */
+      /* No motion: show one copy only and let it wrap naturally. */
       .marquee-track {
         animation: none;
         width: auto;
@@ -996,12 +1015,7 @@
         padding-inline: 1rem;
       }
 
-      .marquee-track > ul {
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-
-      .marquee-track > ul[aria-hidden='true'] {
+      .marquee-track > :nth-child(n + 5) {
         display: none;
       }
     }
